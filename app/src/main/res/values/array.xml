@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="city">
+        <item> 서울지점 </item>
+        <item> 경기지점 </item>
+        <item> 부산지점 </item>
+        <item> 대전지점 </item>
+        <item> 탄현지점 </item>
+    </string-array>
+</resources>
