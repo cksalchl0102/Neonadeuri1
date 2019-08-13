@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "60857177412",
+    "firebase_url": "https://neonadeuri-ab559.firebaseio.com",
+    "project_id": "neonadeuri-ab559",
+    "storage_bucket": "neonadeuri-ab559.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60857177412:android:ca581068582c90c3",
+        "android_client_info": {
+          "package_name": "com.example.neonadeuri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60857177412-ctgbf40k8c98muhht6d9nujrf0e1aioh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.neonadeuri",
+            "certificate_hash": "6d89e5b722a1dd2aa1d666e474d7e5de776879fc"
+          }
+        },
+        {
+          "client_id": "60857177412-4fivr7nfu59i83p967fgovm1eqv6vumd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJytY2m5kK3tYFDhD-22UDycFvAPYhrZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60857177412-4fivr7nfu59i83p967fgovm1eqv6vumd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

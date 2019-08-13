@@ -53,7 +53,7 @@
                     android:layout_weight="9"
                     android:text="내가 카트에 담은 상품"
                     android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageButton
                     android:id="@+id/refreshItemInCart"
@@ -114,7 +114,46 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"></LinearLayout>
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/buttonEventItemCall"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="행사상품"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/buttonRecoItemCall"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="추천상품"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/image1" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
