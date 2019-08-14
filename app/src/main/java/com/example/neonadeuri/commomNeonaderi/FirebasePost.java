@@ -11,10 +11,11 @@ public class FirebasePost {
     public Long age;
     public String gender;
     public String password;
+
     public FirebasePost(){
 
     }
-    public FirebasePost(String phoneNumber,String name,Long age,String gender){
+    public FirebasePost(String phoneNumber,String name, Long age, String gender){
         this.phoneNumber = phoneNumber;
         this.name = name;
         this.age = age;

@@ -47,7 +47,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     static ArrayList<String> arrayData = new ArrayList<String>();
 
     Button btn_gotoLogin;
-
+    Long key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,10 +94,12 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         if (add) {
             FirebasePost post = new FirebasePost(PhoneNumber, name, age, gender);
             postValues = post.toMap();
+        }else{
+            Toast.makeText(getApplicationContext(),"이미 존재하는 계정입니다.",Toast.LENGTH_LONG).show();
         }
-
-        childUpdates.put("/id_list/" + PhoneNumber, postValues);
+        childUpdates.put("/id_list/" + "Member "+key, postValues);
         mPostReference.updateChildren(childUpdates);
+        //mPostReference.child("/id_list/").setValue(postValues);
     }
 
     public void getFirebaseDatabase() {
@@ -105,27 +107,30 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("getFirebaseDatabase", "key: " + dataSnapshot.getChildrenCount());
+                key = dataSnapshot.getChildrenCount();
                 arrayData.clear();
                 arrayIndex.clear();
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                  /*  String key = postSnapshot.getKey();
+                /*for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String index = postSnapshot.getKey();
                     FirebasePost get = postSnapshot.getValue(FirebasePost.class);
                     String[] info = {get.phoneNumber, get.name, String.valueOf(get.age), get.gender};
                     String Result = setTextLength(info[0], 20) + setTextLength(info[1], 20) + setTextLength(info[2], 10) + setTextLength(info[3], 10);
                     arrayData.add(Result);
 
-                    arrayIndex.add(key);
-                    Log.d("getFirebaseDatabase", "key: " + key);
+                    arrayIndex.add(index);
+                    Log.d("getFirebaseDatabase", "key: " + index);
                     Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3]);
-*/
-                }/*
+
+                }*/
+/*
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String value1 = ds.child("phoneNumber").getValue(String.class);
                     String value2 = ds.child("name").getValue(String.class);
-                    String value3 = ds.child("age").getValue(String.class);
+                    String value3 = ds.child("age").getValue(Long.class).toString();
                     String value4 = ds.child("gender").getValue(String.class);
 
                     FirebasePost get = ds.getValue(FirebasePost.class);
+                    String[] info = {get.phoneNumber, get.name, String.valueOf(get.age), get.gender};
                     String Result = setTextLength(value1, 20) + setTextLength(value2, 20) + setTextLength(value3, 10) + setTextLength(value4, 10);
                     arrayData.add(Result);
 

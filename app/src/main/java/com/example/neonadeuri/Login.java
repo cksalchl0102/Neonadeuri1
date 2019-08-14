@@ -1,9 +1,14 @@
 package com.example.neonadeuri;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,10 +17,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.neonadeuri.commomNeonaderi.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Login extends AppCompatActivity {
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("/id_list/");
+    final AtomicInteger count = new AtomicInteger();
+    //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("id_list");
 
     //일단 이거로 설정
     String phoneNum = "";
@@ -26,21 +44,17 @@ public class Login extends AppCompatActivity {
     ImageButton button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonReset, buttondelete;
     String rootPath = "ccmDb";
     ArrayList<User> userDatabase;
-    DatabaseBroker databaseBroker;
+    ArrayList<FirebasePost> firebasePosts;
 
     Button goToRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        databaseBroker = DatabaseBroker.createDatabaseObject(rootPath);
-        databaseBroker.setUserOnDataBrokerListener(this, onUserListener);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button loginButton = findViewById(R.id.loginButton);
         phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
         //phoneNum = phoneNumber.getText().toString();
-
-
         //String[] formatPhoneNumber = phoneNumber.split("-")
         //String sendPhoneNumData="";
         loginButton.setOnClickListener(loginButtonListener);
@@ -72,11 +86,68 @@ public class Login extends AppCompatActivity {
 
         goToRegister = findViewById(R.id.login_goToRegister);
         goToRegister.setOnClickListener(goToRegisterListener);
+
+        userDatabase = new ArrayList<User>();
+/*
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            // put snapShot in Products.class ...... only children added
+                            // in This case Children Will be price, quantity
+                            User user = userSnapshot.getValue(User.class);
+
+                            // set id manually to tha same instance of the class
+                            user.setIndex(userSnapshot.getKey());
+
+                            // add the Post class to ArrayList
+                            userDatabase.add(user);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                }
+        );*/
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //userDatabase.clear();
+                //firebasePosts.clear();
+                for (DataSnapshot userData : dataSnapshot.getChildren()) {
+                    String key = userData.getKey();
+                    Object phone = userData.getValue();
+                    String[] info = new String[4];
+                    info[0] = userData.child("phoneNumber").getValue().toString();
+                    info[1] = userData.child("name").getValue().toString();
+                    info[2] = userData.child("age").getValue().toString();
+                    info[3] = userData.child("gender").getValue().toString();
+                    //String userPhoneNumber, String userName, String userAge,String userGender
+                    User user = new User(info[0], info[1], info[2], info[3]);
+                    Log.d("chanmi", info[0] + ", " + info[1] + ", " + info[2] + ", " + info[3]);
+                    userDatabase.add(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Log.d("chanmi", "뭐야 왜 안뜸?");
+        for (int i = 0; i < userDatabase.size(); i++) {
+            Log.d("chanmi", userDatabase.get(i).getIndex() + " : " + userDatabase.get(i).getUserName() + ",");
+
+        }
     }
+
     View.OnClickListener goToRegisterListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getApplicationContext(),Register.class);
+            Intent intent = new Intent(getApplicationContext(), Register.class);
             startActivity(intent);
             finish();
         }
@@ -104,6 +175,7 @@ public class Login extends AppCompatActivity {
                     break;
                 case R.id.button2:
                     phoneNumberTextView.append("2");
+                    break;
                 case R.id.button3:
                     phoneNumberTextView.append("3");
                     break;
@@ -145,15 +217,38 @@ public class Login extends AppCompatActivity {
     };
 
     View.OnClickListener loginButtonListener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void onClick(View view) {
             //if(핸드폰 번호가 11자리 이하일 때){ 다시 입력하세요 다이얼로그}
             //if(핸드폰 번호가 존재하지 않는 번호일 때{ 가입되있지 않은 번호입니다 다이얼로그}
             String str = phoneNumberTextView.getText().toString();
             if (str.length() == 13) {
-                for (int i = 0; i < userDatabase.size(); i++) {
-                    User user = userDatabase.get(i);
-                    if (user.isMeByPhoneNumber(str)) {
+                for(int j=0;j<userDatabase.size();j++){
+                    if(userDatabase.get(j).isMeByPhoneNumber(str)){
+                        Toast.makeText(getApplicationContext(),userDatabase.get(j).getUserName()+"님 로그인하셨습니다.",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(),Home.class);
+                        intent.putExtra("name",userDatabase.get(j).getUserName());
+                        intent.putExtra("phoneNumber",userDatabase.get(j).getUserPhoneNumber());
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+                Toast.makeText(getApplicationContext(),"존재하지 않는 전화번호입니다.",Toast.LENGTH_LONG).show();
+                return;
+                /*int position ;
+                if (position == 0) {
+                    Toast.makeText(getApplicationContext(), "존재하지 않는 번호입니다.", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+                    Toast.makeText(getApplicationContext(), userDatabase.get(position).getUserName() + "님 로그인을 환영합니다.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), Home.class);
+                    intent.putExtra("name", userDatabase.get(position).getUserName());
+                    intent.putExtra("phoneNumber", userDatabase.get(position).getUserPhoneNumber());
+                    startActivity(intent);
+                    finish();
+                }*/
+                    /*if (user.isMeByPhoneNumber(str)) {
                         phoneNum = phoneNumberTextView.getText().toString();
                         //User user = new User(phoneNum);
                         Intent intent = new Intent(getApplicationContext(), Home.class);
@@ -162,18 +257,25 @@ public class Login extends AppCompatActivity {
                         //Message.information(Login.this,"로그인 성공","로그인하셨습니다. ");
                         startActivity(intent);
                         finish();
-                    }
-                }
+                    }*/
+
             } else {
                 Toast.makeText(Login.this, "입력 양식이 잘못되었습니다.", Toast.LENGTH_LONG).show();
             }
-
         }
     };
-    DatabaseBroker.OnDataBrokerListener onUserListener = new DatabaseBroker.OnDataBrokerListener() {
-        @Override
-        public void onChange(String databaseStr) {
-            userDatabase = databaseBroker.loadUserDatabase(Login.this);//userData 저장한 곳!!!!!!!
+/*
+    public int getArrayListPhoneNumberPosition(String inputNum) {
+        // FirebasePost pose =
+        for (int j = 0; j < userDatabase.size(); j++) {
+            if (userDatabase.get(j).getUserPhoneNumber() == inputNum) {
+                return j;
+            }
+            *//*if (Objects.equals(userDatabase.get(j).getIndex(), inputNum)) {
+                return j;
+            }*//*
         }
-    };
+        return 0;
+    }
+    //for(int k=0;k<Fire)*/
 }
