@@ -17,9 +17,12 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.example.neonadeuri.commomNeonaderi.InCartAdapter;
 
 public class Home extends AppCompatActivity {
 
@@ -31,29 +34,43 @@ public class Home extends AppCompatActivity {
     ImageView imageView = null, imageView2 = null;
 
     boolean imageViewIndex = true;
+    ListView listView;
+    InCartAdapter inCartAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent(); //데이터 수신
         String userPhoneNum = intent.getExtras().getString("phoneNumber");
-        setTitle(userPhoneNum+"님의 접속");
+        String userName = intent.getExtras().getString("name");
+        setTitle(userName+", "+userPhoneNum+"님의 접속");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        t1 = (TableLayout) findViewById(R.id.inMyCartTableLinearLayout);
+       /* t1 = (TableLayout) findViewById(R.id.inMyCartTableLinearLayout);
         rowLayout = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        createTableRow(this);
+        createTableRow(this);*/
         buttonEventItem = findViewById(R.id.buttonEventItemCall);
         buttonRecoItem = findViewById(R.id.buttonRecoItemCall);
-        buttonRecoItem.setOnClickListener(callItem);
-        buttonEventItem.setOnClickListener(callItem);
+       /* buttonRecoItem.setOnClickListener(callItem);
+        buttonEventItem.setOnClickListener(callItem);*/
         imageView = findViewById(R.id.imageView);
         //imageView2 = findViewById(R.id.imageView);
         /*imageView1.setImageResource(R.drawable.image1);
         imageView2.setImageResource(R.drawable.image2);
         imageView1.setVisibility(View.VISIBLE);
         imageView2.setVisibility(View.INVISIBLE);*/
-    }
 
+        inCartAdapter = new InCartAdapter();
+        listView = findViewById(R.id.in_cart_list);
+        listView.setAdapter(inCartAdapter);
+
+        inCartAdapter.addItem("iPhone XS","1500000","1","딩니폰 ");
+        inCartAdapter.addItem("팜스 사과 3kg","19800","1","할인중");
+        inCartAdapter.addItem("임금님표 이천쌀","47900","1","-");
+        inCartAdapter.addItem("홍삼정","172260","1","-");
+        inCartAdapter.addItem("이니스프리 선크림","13200","1","1+1 행사중");
+        inCartAdapter.addItem("르꼬끄 백팩","128000","1","-");
+    }
+/*
     View.OnClickListener callItem = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -65,8 +82,8 @@ public class Home extends AppCompatActivity {
                 imageViewIndex = true;
             }
         }
-    };
-
+    };*/
+/*
     public void createTableRow(Home v) {
 
         TableRow row[] = new TableRow[6];
@@ -93,5 +110,5 @@ public class Home extends AppCompatActivity {
             }
             t1.addView(row[i], rowLayout);
         }
-    }
+    }*/
 }

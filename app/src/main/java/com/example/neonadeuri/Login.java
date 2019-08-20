@@ -33,18 +33,12 @@ public class Login extends AppCompatActivity {
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("/id_list/");
     final AtomicInteger count = new AtomicInteger();
-    //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("id_list");
 
-    //일단 이거로 설정
-    String phoneNum = "";
-    String name = "최찬미";
-    String pw = "123456";
     //이벤트 사용자의 번호 입력.
     TextView phoneNumberTextView;
     ImageButton button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonReset, buttondelete;
     String rootPath = "ccmDb";
     ArrayList<User> userDatabase;
-    ArrayList<FirebasePost> firebasePosts;
 
     Button goToRegister;
 
@@ -203,12 +197,16 @@ public class Login extends AppCompatActivity {
                         phoneNumberTextView.setText("");
                     }
                     break;
+
+
+                    //한글자씩 지우는 기능임.
                 case R.id.button11:
-                    int length = phoneNumberTextView.getText().length();
-                    String str = phoneNumberTextView.getText().toString();
-                    str = str.substring(0, length - 1);
-                    if (length > 0) {
-                        phoneNumberTextView.setText(str);
+                    if(inx == 0){
+                        return;
+                    }else {
+                        String str = phoneNumberTextView.getText().toString();
+                        String renewal = str.substring(0,str.length()-1);
+                        phoneNumberTextView.setText(renewal);
                     }
                     break;
 
@@ -236,46 +234,9 @@ public class Login extends AppCompatActivity {
                 }
                 Toast.makeText(getApplicationContext(),"존재하지 않는 전화번호입니다.",Toast.LENGTH_LONG).show();
                 return;
-                /*int position ;
-                if (position == 0) {
-                    Toast.makeText(getApplicationContext(), "존재하지 않는 번호입니다.", Toast.LENGTH_LONG).show();
-                    return;
-                } else {
-                    Toast.makeText(getApplicationContext(), userDatabase.get(position).getUserName() + "님 로그인을 환영합니다.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), Home.class);
-                    intent.putExtra("name", userDatabase.get(position).getUserName());
-                    intent.putExtra("phoneNumber", userDatabase.get(position).getUserPhoneNumber());
-                    startActivity(intent);
-                    finish();
-                }*/
-                    /*if (user.isMeByPhoneNumber(str)) {
-                        phoneNum = phoneNumberTextView.getText().toString();
-                        //User user = new User(phoneNum);
-                        Intent intent = new Intent(getApplicationContext(), Home.class);
-                        intent.putExtra("phoneNumber", phoneNum);
-                        Toast.makeText(Login.this, "로그인을 환영합니다.", Toast.LENGTH_LONG).show();
-                        //Message.information(Login.this,"로그인 성공","로그인하셨습니다. ");
-                        startActivity(intent);
-                        finish();
-                    }*/
-
             } else {
                 Toast.makeText(Login.this, "입력 양식이 잘못되었습니다.", Toast.LENGTH_LONG).show();
             }
         }
     };
-/*
-    public int getArrayListPhoneNumberPosition(String inputNum) {
-        // FirebasePost pose =
-        for (int j = 0; j < userDatabase.size(); j++) {
-            if (userDatabase.get(j).getUserPhoneNumber() == inputNum) {
-                return j;
-            }
-            *//*if (Objects.equals(userDatabase.get(j).getIndex(), inputNum)) {
-                return j;
-            }*//*
-        }
-        return 0;
-    }
-    //for(int k=0;k<Fire)*/
 }

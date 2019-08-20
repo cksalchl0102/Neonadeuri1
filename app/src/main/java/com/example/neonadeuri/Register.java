@@ -48,6 +48,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
     Button btn_gotoLogin;
     Long key;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,10 +95,10 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         if (add) {
             FirebasePost post = new FirebasePost(PhoneNumber, name, age, gender);
             postValues = post.toMap();
-        }else{
-            Toast.makeText(getApplicationContext(),"이미 존재하는 계정입니다.",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "이미 존재하는 계정입니다.", Toast.LENGTH_LONG).show();
         }
-        childUpdates.put("/id_list/" + "Member "+key, postValues);
+        childUpdates.put("/id_list/" + "Member " + key, postValues);
         mPostReference.updateChildren(childUpdates);
         //mPostReference.child("/id_list/").setValue(postValues);
     }
@@ -168,6 +169,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                     getFirebaseDatabase();
                     setRegissterMode();
                     Toast.makeText(Register.this, "회원 가입 성공", Toast.LENGTH_LONG).show();
+                } else if (PhoneNumber == "" || name == "") {
+                    Toast.makeText(getApplicationContext(), "다시 입력하세요.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(Register.this, "이미 존재하는 ID 입니다. 다른 ID로 설정해주세요.", Toast.LENGTH_LONG).show();
                 }
@@ -186,7 +189,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 break;
 
             case R.id.register_goToLogin_button:
-                Intent intent = new Intent(getApplicationContext(),Login.class);
+                Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
         }
