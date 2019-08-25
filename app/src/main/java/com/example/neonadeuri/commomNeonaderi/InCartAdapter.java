@@ -35,6 +35,10 @@ public class InCartAdapter extends BaseAdapter {
         return i;
     }
 
+    public String getPrice(int i){
+        return listViewInCartItemList.get(i).getItemPrice();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;

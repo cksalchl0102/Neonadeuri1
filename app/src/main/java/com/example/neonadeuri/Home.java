@@ -14,15 +14,19 @@ import android.media.Image;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -31,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.neonadeuri.commomNeonaderi.InCartAdapter;
 import com.example.neonadeuri.commomNeonaderi.Message;
+import com.example.neonadeuri.commomNeonaderi.ProductDTO;
 
 public class Home extends AppCompatActivity {
 
@@ -42,7 +47,13 @@ public class Home extends AppCompatActivity {
     SeekBar seekBar = null;
     TextView curMoneyTextView = null;
     Button settingMoneyBtn = null;
-    String budgetItThis;
+    String budgetItThis; //시용자의 현재 금액 저장
+    TextView budgetTextview; //현재 금액 보이기 View
+    int curMoney = 0;
+
+    ImageButton refreshItemInCart= null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent(); //데이터 수신
@@ -58,20 +69,34 @@ public class Home extends AppCompatActivity {
         buttonEventItem.setOnClickListener(imageChangeButtonEvent);
         buttonRecoItem.setOnClickListener(imageChangeButtonEvent);
 
+        //refreshItemInCart
+        refreshItemInCart = findViewById(R.id.refreshItemInCart);
+        refreshItemInCart.setOnClickListener(refreshItemInCartListener);
+
+
         curMoneyTextView = findViewById(R.id.curMoney);
         settingMoneyBtn = findViewById(R.id.settingMoneyBtn);
         settingMoneyBtn.setOnClickListener(settingMoneyBtnListener);
+
+        //예산안 보이기.
+        budgetTextview = findViewById(R.id.maxMoneyTextView);
 
         inCartAdapter = new InCartAdapter();
         listView = findViewById(R.id.in_cart_list);
         listView.setAdapter(inCartAdapter);
 
         seekBar = findViewById(R.id.seekBar1);
+        seekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 seekBarSetText();
-                curMoneyTextView.setText(i * 15000 + "원");
+                curMoneyTextView.setText(i+ "원");
             }
 
             @Override
@@ -91,15 +116,35 @@ public class Home extends AppCompatActivity {
         inCartAdapter.addItem("홍삼정", "172260", "  1", "-");
         inCartAdapter.addItem("이니스프리 선크림", "13200", "  2", "1+1 행사중");
         inCartAdapter.addItem("르꼬끄 백팩", "128000", "  1", "-");
+
     }
+
+    View.OnClickListener refreshItemInCartListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            for (int i = 0; i < inCartAdapter.getCount(); i++) {
+                curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i));
+            }
+            curMoneyTextView.setText(String.valueOf(curMoney));
+            /*int progress = seekBar.getProgress();
+            int max = seekBar.getMax();
+            int offset = seekBar.getThumbOffset();
+
+            float percent = ((float) progress) / (float) max;
+            int width = seekBar.getWidth() - 2 * offset;
+            int answer = ((int) (width * percent + offset - curMoneyTextView.getWidth() / 2));
+            curMoneyTextView.setX(answer);*/
+            seekBar.setProgress(seekBar.getProgress()+curMoney);
+        }
+    };
 
     View.OnClickListener settingMoneyBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-           // Message.information(Home.this, "예산 설정하기", "오늘 계획하신 예산을 입력해주세요. ");
+            // Message.information(Home.this, "예산 설정하기", "오늘 계획하신 예산을 입력해주세요. ");
            /* String money = Message.infoGetString(Home.this,"예산 설정하기","오늘의 계획 예산은? ");
             Toast.makeText(getApplicationContext(),money,Toast.LENGTH_LONG).show();*/
-           setting_money_dialog_show();
+            setting_money_dialog_show();
         }
     };
 
@@ -124,23 +169,23 @@ public class Home extends AppCompatActivity {
         int offset = seekBar.getThumbOffset();
         float percent = ((float) progress) / (float) max;
         int width = seekBar.getWidth() - 2 * offset;
-
         int answer = ((int) (width * percent + offset - curMoneyTextView.getWidth() / 2));
         curMoneyTextView.setX(answer);
     }
-/*
-    View.OnClickListener callItem = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v.getId() == R.id.buttonEventItemCall) {
-                imageView.setImageResource(R.drawable.image2);
-                imageViewIndex = false;
-            } else if (v.getId() == R.id.buttonRecoItemCall) {
-                imageView.setImageResource(R.drawable.image1);
-                imageViewIndex = true;
+
+    /*
+        View.OnClickListener callItem = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.buttonEventItemCall) {
+                    imageView.setImageResource(R.drawable.image2);
+                    imageViewIndex = false;
+                } else if (v.getId() == R.id.buttonRecoItemCall) {
+                    imageView.setImageResource(R.drawable.image1);
+                    imageViewIndex = true;
+                }
             }
-        }
-    };*/
+        };*/
 /*
     public void createTableRow(Home v) {
 
@@ -169,25 +214,39 @@ public class Home extends AppCompatActivity {
             t1.addView(row[i], rowLayout);
         }
     }*/
-    public void setting_money_dialog_show(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(Home.this,R.style.MyAlertDialogStyle);
+    public void setting_money_dialog_show() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.MyAlertDialogStyle);
         builder.setTitle("예산안 입력하기");
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.setting_money_dialog,null);
+        View view = inflater.inflate(R.layout.setting_money_dialog, null);
         builder.setView(view);
 
         final EditText budgetText = view.findViewById(R.id.budgetText);
         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               String budget = budgetText.getText().toString();
-                if(budget == ""){
+                String budget = budgetText.getText().toString();
+                if (budget == "") {
                     //아무 입력도 하지 않음.
-                    Message.information(Home.this,"경고","입력하지 않으셨습니다.");
+                    //이거 인식이 안됨 나중에 고쳐야할 것 우선순위 : 4
+                    Message.information(Home.this, "경고", "입력하지 않으셨습니다.");
                     return;
-                }else{
+                } else {
                     budgetItThis = budget;
                     Toast.makeText(getApplicationContext(),budgetItThis+"원 확인 ",Toast.LENGTH_LONG).show();
+                    budgetTextview.setText(budgetItThis+"원 ♥");
+                    seekBar.setMax(Integer.parseInt(budgetItThis));
+                   // budgetItThis = budget;
+                   /* try {
+                        int value = Integer.parseInt(budgetItThis);
+                        Toast.makeText(getApplicationContext(),budgetItThis+"원 확인 ",Toast.LENGTH_LONG).show();
+                        budgetTextview.setText(budgetItThis+"원 ♥");
+                        ProgressBar progressBar = findViewById(R.id.progress);
+                        progressBar.setMax(value);
+                        progressBar.setProgress(curMoney);
+                    } catch (Exception e) {
+                       Toast.makeText(getApplicationContext(),"오프로그래스 바 오류",Toast.LENGTH_LONG).show();
+                    }*/
                 }
             }
         });
