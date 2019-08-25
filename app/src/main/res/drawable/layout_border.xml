@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+           <!-- //stroke는 테두리의 두께와 색상-->
+            <stroke
+                android:width="3dp"
+                android:color="#8b7765" />
+            <!--solid는 배경 색상 지정-->
+            <solid android:color="#FFFFF0	" />
+        </shape>
+    </item>
+</layer-list>
