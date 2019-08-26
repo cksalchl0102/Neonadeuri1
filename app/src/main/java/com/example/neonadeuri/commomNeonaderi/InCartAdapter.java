@@ -1,25 +1,31 @@
 package com.example.neonadeuri.commomNeonaderi;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
+import com.example.neonadeuri.Home;
 import com.example.neonadeuri.R;
 
 import java.util.ArrayList;
 
-public class InCartAdapter extends BaseAdapter {
+public class InCartAdapter extends BaseAdapter{
 
     private ArrayList<InCartItem> listViewInCartItemList = new ArrayList<InCartItem>();
 
     public InCartAdapter() {
 
     }
-
     @Override
     public int getCount() {
         return listViewInCartItemList.size();
@@ -40,7 +46,7 @@ public class InCartAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final int pos = position;
         final Context context = parent.getContext();
 
@@ -53,6 +59,20 @@ public class InCartAdapter extends BaseAdapter {
         TextView itemNative = convertView.findViewById(R.id.itemOrigin);
         TextView itemInfo = convertView.findViewById(R.id.itemInfo);
 
+        //리스트 뷰 안에서 이미지 버튼 클릭시 이벤트 처리하는 부분
+        ImageButton imageButton = convertView.findViewById(R.id.list_item_minus_imageButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("chanmi","minus button click OK");
+                try{
+                    listViewInCartItemList.remove(position);
+                    notifyDataSetChanged();
+                }catch (Exception e){
+                    Log.d("chanmi","응 삭제 안돼 ㅎㅎ ㅜ.ㅜ");
+                }
+            }
+        });
         InCartItem inCartItem = listViewInCartItemList.get(position);
 
         itemName.setText(inCartItem.getItemName());
@@ -60,6 +80,7 @@ public class InCartAdapter extends BaseAdapter {
         itemInfo.setText(inCartItem.getItemInfo());
         itemNative.setText(inCartItem.getItemNative());
         return convertView;
+
     }
     public void addItem(String name,String price,String origin,String info){
         InCartItem inCartItem  = new InCartItem();

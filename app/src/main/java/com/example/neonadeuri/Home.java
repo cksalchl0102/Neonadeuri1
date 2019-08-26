@@ -85,6 +85,7 @@ public class Home extends AppCompatActivity {
         listView = findViewById(R.id.in_cart_list);
         listView.setAdapter(inCartAdapter);
 
+
         seekBar = findViewById(R.id.seekBar1);
         seekBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -122,18 +123,12 @@ public class Home extends AppCompatActivity {
     View.OnClickListener refreshItemInCartListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            curMoney = 0;
+            inCartAdapter.notifyDataSetChanged();
             for (int i = 0; i < inCartAdapter.getCount(); i++) {
                 curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i));
             }
             curMoneyTextView.setText(String.valueOf(curMoney));
-            /*int progress = seekBar.getProgress();
-            int max = seekBar.getMax();
-            int offset = seekBar.getThumbOffset();
-
-            float percent = ((float) progress) / (float) max;
-            int width = seekBar.getWidth() - 2 * offset;
-            int answer = ((int) (width * percent + offset - curMoneyTextView.getWidth() / 2));
-            curMoneyTextView.setX(answer);*/
             seekBar.setProgress(seekBar.getProgress()+curMoney);
         }
     };
