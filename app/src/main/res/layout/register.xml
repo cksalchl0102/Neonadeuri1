@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register">
+    tools:context=".Register"
+    android:background="@drawable/background2">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -122,12 +123,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="회원가입"
+            android:background="#f5fffa	"
             android:textSize="20sp"/>
         <Button
             android:id="@+id/register_goToLogin_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="로그인 화면으로 돌아가기"
+            android:background="#fffafa	"
             android:layout_margin="3dp"/>
     </LinearLayout>
 </LinearLayout>

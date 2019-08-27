@@ -19,13 +19,14 @@ import com.example.neonadeuri.R;
 
 import java.util.ArrayList;
 
-public class InCartAdapter extends BaseAdapter{
+public class InCartAdapter extends BaseAdapter {
 
     private ArrayList<InCartItem> listViewInCartItemList = new ArrayList<InCartItem>();
 
     public InCartAdapter() {
 
     }
+
     @Override
     public int getCount() {
         return listViewInCartItemList.size();
@@ -41,8 +42,15 @@ public class InCartAdapter extends BaseAdapter{
         return i;
     }
 
-    public String getPrice(int i){
+    public String getPrice(int i) {
         return listViewInCartItemList.get(i).getItemPrice();
+    }
+
+    public String getNumber(int i) {
+        return listViewInCartItemList.get(i).getItemNumber();
+    }
+    public String getInfo(int i){
+        return listViewInCartItemList.get(i).getItemInfo();
     }
 
     @Override
@@ -64,12 +72,13 @@ public class InCartAdapter extends BaseAdapter{
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("chanmi","minus button click OK");
-                try{
+                Log.d("chanmi", "minus button click OK");
+                try {
                     listViewInCartItemList.remove(position);
+                    notifyDataSetInvalidated();
                     notifyDataSetChanged();
-                }catch (Exception e){
-                    Log.d("chanmi","응 삭제 안돼 ㅎㅎ ㅜ.ㅜ");
+                } catch (Exception e) {
+                    Log.d("chanmi", "삭제 안돼 ㅎㅎ ㅜ.ㅜ");
                 }
             }
         });
@@ -78,18 +87,20 @@ public class InCartAdapter extends BaseAdapter{
         itemName.setText(inCartItem.getItemName());
         itemPrice.setText(inCartItem.getItemPrice());
         itemInfo.setText(inCartItem.getItemInfo());
-        itemNative.setText(inCartItem.getItemNative());
+        itemNative.setText(inCartItem.getItemNumber());
         return convertView;
 
     }
-    public void addItem(String name,String price,String origin,String info){
-        InCartItem inCartItem  = new InCartItem();
+
+    public void addItem(String name, String price, String number, String info) {
+        InCartItem inCartItem = new InCartItem();
 
         inCartItem.setItemName(name);
         inCartItem.setItemPrice(price);
-        inCartItem.setItemNative(origin);
+        inCartItem.setItemNumber(number);
         inCartItem.setItemInfo(info);
 
         listViewInCartItemList.add(inCartItem);
     }
+
 }

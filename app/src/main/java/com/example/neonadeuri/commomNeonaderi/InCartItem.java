@@ -3,7 +3,7 @@ package com.example.neonadeuri.commomNeonaderi;
 public class InCartItem {
     private String itemName;
     private String itemPrice;
-    private String itemNative;
+    private String itemNumber;
     private String itemInfo;
 
     public InCartItem() {
@@ -17,8 +17,8 @@ public class InCartItem {
         this.itemPrice = itemPrice;
     }
 
-    public void setItemNative(String itemNative) {
-        this.itemNative = itemNative;
+    public void setItemNumber(String itemNumber) {
+        this.itemNumber = itemNumber;
     }
 
     public String getItemName() {
@@ -29,8 +29,8 @@ public class InCartItem {
         return itemPrice;
     }
 
-    public String getItemNative() {
-        return itemNative;
+    public String getItemNumber() {
+        return itemNumber;
     }
 
     public String getItemInfo() {
@@ -40,6 +40,4 @@ public class InCartItem {
     public void setItemInfo(String itemInfo) {
         this.itemInfo = itemInfo;
     }
-
-
 }

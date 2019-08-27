@@ -197,8 +197,6 @@ public class Login extends AppCompatActivity {
                         phoneNumberTextView.setText("");
                     }
                     break;
-
-
                     //한글자씩 지우는 기능임.
                 case R.id.button11:
                     if(inx == 0){
@@ -209,7 +207,6 @@ public class Login extends AppCompatActivity {
                         phoneNumberTextView.setText(renewal);
                     }
                     break;
-
             }
         }
     };
@@ -221,9 +218,10 @@ public class Login extends AppCompatActivity {
             //if(핸드폰 번호가 11자리 이하일 때){ 다시 입력하세요 다이얼로그}
             //if(핸드폰 번호가 존재하지 않는 번호일 때{ 가입되있지 않은 번호입니다 다이얼로그}
             String str = phoneNumberTextView.getText().toString();
+            String resultNum = splitPhoneNumber(str);
             if (str.length() == 13) {
                 for(int j=0;j<userDatabase.size();j++){
-                    if(userDatabase.get(j).isMeByPhoneNumber(str)){
+                    if(userDatabase.get(j).isMeByPhoneNumber(resultNum)){
                         Toast.makeText(getApplicationContext(),userDatabase.get(j).getUserName()+"님 로그인하셨습니다.",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(),Home.class);
                         intent.putExtra("name",userDatabase.get(j).getUserName());
@@ -239,4 +237,12 @@ public class Login extends AppCompatActivity {
             }
         }
     };
+    public String splitPhoneNumber(String phoneNumber) {
+        String[] array = phoneNumber.split("-");
+        String result = "";
+        for (int i = 0; i < array.length; i++) {
+            result = result + array[i];
+        }
+        return result;
+    }
 }

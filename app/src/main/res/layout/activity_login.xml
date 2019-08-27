@@ -23,9 +23,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="휴대폰 번호로 로그인하세요!"
                 android:textSize="30dp"
+                android:textColor="#8b7d6b"
                 android:textStyle="bold" />
 
             <TextView
@@ -60,7 +61,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:stretchColumns="*">
+                    android:stretchColumns="*"
+                    android:layout_marginBottom="4dp">
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -200,13 +202,21 @@
                         android:id="@+id/loginButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Enter" />
+                        android:text="LOG IN"
+                        android:textSize="20dp"
+                        android:letterSpacing="0.2"
+                        android:background="@drawable/buttonshape3"
+                        android:textColor="#430000"
+                        android:layout_marginBottom="4dp"/>
 
                     <Button
                         android:id="@+id/login_goToRegister"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="회원 가입" />
+                        android:text="JOIN US"
+                        android:textSize="16dp"
+                        android:textColor="#430000"
+                        android:background="@drawable/buttonshape3"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -2,6 +2,8 @@ package com.example.neonadeuri;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -57,6 +59,29 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         btn_register.setOnClickListener(Register.this);
 
         edit_PhoneNumber = findViewById(R.id.register_PhoneNumber);
+        edit_PhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int cnt = edit_PhoneNumber.getText().length();
+                if (cnt == 3 || cnt == 8) {
+                    edit_PhoneNumber.append("-");
+                }
+                if (cnt >= 13) {
+                    // Message.information("입력 수 초과","핸드폰 길이 초과입니다");
+                    Toast.makeText(Register.this, "더 이상 입력하실 수 없습니다..", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         edit_Name = findViewById(R.id.register_name);
         edit_Age = findViewById(R.id.register_age);
 
@@ -111,31 +136,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 key = dataSnapshot.getChildrenCount();
                 arrayData.clear();
                 arrayIndex.clear();
-                /*for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    String index = postSnapshot.getKey();
-                    FirebasePost get = postSnapshot.getValue(FirebasePost.class);
-                    String[] info = {get.phoneNumber, get.name, String.valueOf(get.age), get.gender};
-                    String Result = setTextLength(info[0], 20) + setTextLength(info[1], 20) + setTextLength(info[2], 10) + setTextLength(info[3], 10);
-                    arrayData.add(Result);
-
-                    arrayIndex.add(index);
-                    Log.d("getFirebaseDatabase", "key: " + index);
-                    Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3]);
-
-                }*/
-/*
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String value1 = ds.child("phoneNumber").getValue(String.class);
-                    String value2 = ds.child("name").getValue(String.class);
-                    String value3 = ds.child("age").getValue(Long.class).toString();
-                    String value4 = ds.child("gender").getValue(String.class);
-
-                    FirebasePost get = ds.getValue(FirebasePost.class);
-                    String[] info = {get.phoneNumber, get.name, String.valueOf(get.age), get.gender};
-                    String Result = setTextLength(value1, 20) + setTextLength(value2, 20) + setTextLength(value3, 10) + setTextLength(value4, 10);
-                    arrayData.add(Result);
-
-                }*/
             }
 
             @Override
@@ -161,14 +161,15 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit:
-                PhoneNumber = edit_PhoneNumber.getText().toString();
+                String pn = edit_PhoneNumber.getText().toString();
+                PhoneNumber = splitPhoneNumber(pn);
                 name = edit_Name.getText().toString();
                 age = Long.parseLong(edit_Age.getText().toString());
                 if (!IsExistPhoneNumber()) {
                     postFirebaseDatabase(true);
                     getFirebaseDatabase();
                     setRegissterMode();
-                    Toast.makeText(Register.this, "회원 가입 성공", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this, "회원 가입 성공" + PhoneNumber, Toast.LENGTH_LONG).show();
                 } else if (PhoneNumber == "" || name == "") {
                     Toast.makeText(getApplicationContext(), "다시 입력하세요.", Toast.LENGTH_LONG).show();
                 } else {
@@ -193,5 +194,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent);
                 finish();
         }
+    }
+
+    public String splitPhoneNumber(String phoneNumber) {
+        String[] array = phoneNumber.split("-");
+        String result = "";
+        for (int i = 0; i < array.length; i++) {
+            result = result + array[i];
+        }
+        return result;
     }
 }
