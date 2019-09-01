@@ -168,7 +168,7 @@ public class Home extends AppCompatActivity {
                     curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i));
                 }
             }
-            curMoneyTextView.setText(String.valueOf(curMoney));
+            curMoneyTextView.setText(String.valueOf(curMoney)+"원");
             //seekBar.setProgress(seekBar.getProgress()+curMoney);
             seekBar.setProgress(curMoney);
             /*curMoney = calculMoney();

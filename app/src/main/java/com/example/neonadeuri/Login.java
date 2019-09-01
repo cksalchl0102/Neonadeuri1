@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.neonadeuri.commomNeonaderi.*;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,20 +28,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Login extends AppCompatActivity {
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("/id_list/");
-    final AtomicInteger count = new AtomicInteger();
 
     //이벤트 사용자의 번호 입력.
     TextView phoneNumberTextView;
     ImageButton button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonReset, buttondelete;
-    String rootPath = "ccmDb";
     ArrayList<User> userDatabase;
-
     Button goToRegister;
+    String[] oj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +46,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Button loginButton = findViewById(R.id.loginButton);
         phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
-        //phoneNum = phoneNumber.getText().toString();
-        //String[] formatPhoneNumber = phoneNumber.split("-")
-        //String sendPhoneNumData="";
+
         loginButton.setOnClickListener(loginButtonListener);
         button0 = findViewById(R.id.button0);
         button1 = findViewById(R.id.button1);
@@ -106,36 +102,6 @@ public class Login extends AppCompatActivity {
                     }
                 }
         );*/
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //userDatabase.clear();
-                //firebasePosts.clear();
-                for (DataSnapshot userData : dataSnapshot.getChildren()) {
-                    String key = userData.getKey();
-                    Object phone = userData.getValue();
-                    String[] info = new String[4];
-                    info[0] = userData.child("phoneNumber").getValue().toString();
-                    info[1] = userData.child("name").getValue().toString();
-                    info[2] = userData.child("age").getValue().toString();
-                    info[3] = userData.child("gender").getValue().toString();
-                    //String userPhoneNumber, String userName, String userAge,String userGender
-                    User user = new User(info[0], info[1], info[2], info[3]);
-                    Log.d("chanmi", info[0] + ", " + info[1] + ", " + info[2] + ", " + info[3]);
-                    userDatabase.add(user);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        Log.d("chanmi", "뭐야 왜 안뜸?");
-        for (int i = 0; i < userDatabase.size(); i++) {
-            Log.d("chanmi", userDatabase.get(i).getIndex() + " : " + userDatabase.get(i).getUserName() + ",");
-
-        }
     }
 
     View.OnClickListener goToRegisterListener = new View.OnClickListener() {
@@ -197,13 +163,13 @@ public class Login extends AppCompatActivity {
                         phoneNumberTextView.setText("");
                     }
                     break;
-                    //한글자씩 지우는 기능임.
+                //한글자씩 지우는 기능임.
                 case R.id.button11:
-                    if(inx == 0){
+                    if (inx == 0) {
                         return;
-                    }else {
+                    } else {
                         String str = phoneNumberTextView.getText().toString();
-                        String renewal = str.substring(0,str.length()-1);
+                        String renewal = str.substring(0, str.length() - 1);
                         phoneNumberTextView.setText(renewal);
                     }
                     break;
@@ -219,24 +185,41 @@ public class Login extends AppCompatActivity {
             //if(핸드폰 번호가 존재하지 않는 번호일 때{ 가입되있지 않은 번호입니다 다이얼로그}
             String str = phoneNumberTextView.getText().toString();
             String resultNum = splitPhoneNumber(str);
-            if (str.length() == 13) {
-                for(int j=0;j<userDatabase.size();j++){
-                    if(userDatabase.get(j).isMeByPhoneNumber(resultNum)){
-                        Toast.makeText(getApplicationContext(),userDatabase.get(j).getUserName()+"님 로그인하셨습니다.",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(),Home.class);
-                        intent.putExtra("name",userDatabase.get(j).getUserName());
-                        intent.putExtra("phoneNumber",userDatabase.get(j).getUserPhoneNumber());
-                        startActivity(intent);
-                        finish();
-                    }
+            if (str.length() == 13) { //전화번호 총 13자리 일 떄.
+                if (checkUser(resultNum)) {
+                    Intent intent = new Intent(getApplicationContext(), Home.class);
+                    intent.putExtra("name", oj[1]);
+                    intent.putExtra("phoneNumber", str);
+                    startActivity(intent);
+                    finish();
                 }
-                Toast.makeText(getApplicationContext(),"존재하지 않는 전화번호입니다.",Toast.LENGTH_LONG).show();
-                return;
             } else {
                 Toast.makeText(Login.this, "입력 양식이 잘못되었습니다.", Toast.LENGTH_LONG).show();
             }
         }
     };
+
+    public boolean checkUser(String phoneNumber) {
+        String result="";
+        try {
+            result = new CustomTask().execute(phoneNumber,"","","", "login").get();
+            oj = result.split("\t");
+            Log.i("chanmi", "CustomTask().execute : " + result + "OK");
+            if (oj[0].equals("loginOK")) {
+                return true;
+            } else if (oj[0].equals("wrongPhoneNumber")) {
+                Message.information(getApplicationContext(), "알림", "전화번호를 확인해주세요.");
+                return false;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public String splitPhoneNumber(String phoneNumber) {
         String[] array = phoneNumber.split("-");
         String result = "";
