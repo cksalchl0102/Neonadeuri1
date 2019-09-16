@@ -119,7 +119,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/submit"
+            android:id="@+id/register_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="회원가입"

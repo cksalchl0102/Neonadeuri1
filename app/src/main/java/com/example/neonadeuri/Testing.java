@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +52,31 @@ public class Testing extends AppCompatActivity {
         check_Woman.setOnClickListener(Listener);
         registerButton.setOnClickListener(Listener);
         goLoginActivityButton.setOnClickListener(Listener);
+
+        //phone EditText 의 편집 리스너
+        phoneEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int cnt = phoneEdit.getText().length();
+                if (cnt == 3 || cnt == 8) {
+                    phoneEdit.append("-");
+                }
+                if (cnt >= 13) {
+                    // Message.information("입력 수 초과","핸드폰 길이 초과입니다");
+                    Toast.makeText(Testing.this, "더 이상 입력하실 수 없습니다..", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     View.OnClickListener Listener = new View.OnClickListener() {
@@ -57,13 +84,20 @@ public class Testing extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.testing_submit:
-                    phoneNumber = phoneEdit.getText().toString();
+                    phoneNumber = splitPhoneNumber(phoneEdit.getText().toString());
+                    Log.i("chanmi","phoneNumber.length() = "+phoneNumber.length());
                     name = nameEdit.getText().toString();
                     age = ageEdit.getText().toString();
-                    if (registerUser(phoneNumber, name, age, gender)) {
-                        Message.information(getApplicationContext(), "알림", "회원가입 성공");
-                    } else {
-
+                    if(phoneNumber.length() == 11 && name != null && age != null && gender != null){ //전화번호가 13자리이고
+                        //모든 값들을 잘 적어 넣었다면.
+                        if (registerUser(phoneNumber, name, age, gender)) {//회원 가입이 가능한 정보라면.
+                            Message.information(Testing.this, "알림", "회원가입 성공");
+                        }else{
+                            Message.information(Testing.this, "알림","이미 존재하는 전화번호입니다.");
+                        }
+                    }
+                    else {//값들을 유요하지 않게 적었다면.
+                        Message.information(Testing.this,"알림","회원 정보를 정확하게 입력하세요.");
                     }
                     break;
                 case R.id.testing_check_man:
@@ -75,7 +109,7 @@ public class Testing extends AppCompatActivity {
                     gender = "Woman";
                     break;
                 case R.id.testing_goToLogin_button:
-                    Intent intent = new Intent(Testing.this,Login.class);
+                    Intent intent = new Intent(Testing.this, Login.class);
                     startActivity(intent);
                     finish();
             }
@@ -91,7 +125,7 @@ public class Testing extends AppCompatActivity {
                 return true;
             } else if (result.equals("existentPhone")) {
                 Message.information(Testing.this, "알림", "이미 존재하는 번호입니다.");
-                Log.i("chanmi","이미 존재하는 전화번호입니다.");
+                Log.i("chanmi", "이미 존재하는 전화번호입니다.");
                 phoneEdit.setText("");
                 return false;
             }
@@ -101,6 +135,15 @@ public class Testing extends AppCompatActivity {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public String splitPhoneNumber(String phoneNumber) {
+        String[] array = phoneNumber.split("-");
+        String result = "";
+        for (int i = 0; i < array.length; i++) {
+            result = result + array[i];
+        }
+        return result;
     }
 }
 

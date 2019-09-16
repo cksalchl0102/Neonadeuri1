@@ -4,32 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.neonadeuri.commomNeonaderi.*;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Login extends AppCompatActivity {
 
@@ -200,15 +188,16 @@ public class Login extends AppCompatActivity {
     };
 
     public boolean checkUser(String phoneNumber) {
-        String result="";
+        String result = "";
         try {
-            result = new CustomTask().execute(phoneNumber,"","","", "login").get();
+            result = new CustomTask().execute(phoneNumber, "", "", "", "login").get();
             oj = result.split("\t");
             Log.i("chanmi", "CustomTask().execute : " + result + "OK");
+            Log.i("chanmi","oj[1]="+oj[1]);
             if (oj[0].equals("loginOK")) {
                 return true;
             } else if (oj[0].equals("wrongPhoneNumber")) {
-                Message.information(getApplicationContext(), "알림", "전화번호를 확인해주세요.");
+                Message.information(Login.this, "알림", "전화번호를 확인해주세요.");
                 return false;
             }
         } catch (InterruptedException e) {
@@ -219,6 +208,7 @@ public class Login extends AppCompatActivity {
 
         return false;
     }
+
 
     public String splitPhoneNumber(String phoneNumber) {
         String[] array = phoneNumber.split("-");

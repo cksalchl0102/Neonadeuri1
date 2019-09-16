@@ -1,6 +1,5 @@
 package com.example.neonadeuri.commomNeonaderi;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -14,17 +13,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
-public class CustomTask extends AsyncTask<String, Void, String> {
+public class ProductTask extends AsyncTask<String, Void, String> {
     private String sendMsg, recieveMsg;
 
     @Override
     protected String doInBackground(String... strings) {
-        String jspUrl = "http://113.198.84.24:8080/study_v1/neonaduriAdd.jsp";
-        //랩실 113.198.84.24
+        String jspUrl = "http://113.198.84.24:8080/study_v1/neonaduriProduct.jsp";
+        //랩실 : 113.198.84.24
         //집 : 192.168.219.100
         HttpURLConnection conn = null;
-
         try {
             String tmp;
             URL url = new URL(jspUrl);
@@ -36,9 +33,9 @@ public class CustomTask extends AsyncTask<String, Void, String> {
 
             OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
 
-            sendMsg = "phoneNumber=" + strings[0] + "&name=" + strings[1] + "&age=" + strings[2] + "&gender=" + strings[3] + "&type=" + strings[4];
-            Log.i("chanmi", "보낼 값: " + strings[0] + ", " + strings[1] + ", " + strings[2] + ", " + strings[3]);
-            Log.i("chanmi", "sencMsg = " + sendMsg);
+            sendMsg = "productId=" + strings[0] + "&type=" + strings[1];
+            Log.i("chanmi", "보낼 값 = " + strings[0] + strings[1]);
+            Log.i("chanmi", "sendMsg = " + sendMsg);
 
             osw.write(sendMsg);
             Log.i("chanmi", "osw.write(sendMsg) 성공");
@@ -64,7 +61,7 @@ public class CustomTask extends AsyncTask<String, Void, String> {
             if (conn != null) conn.disconnect();
             Log.e("conn_disconnect", "disconnect");
         }
-        Log.i("chanmi","Login recieveMsg = "+recieveMsg);
+        Log.i("chanmi","ProductTask recieveMsg = "+recieveMsg);
         return recieveMsg;
     }
 }
