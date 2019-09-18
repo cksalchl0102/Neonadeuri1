@@ -40,4 +40,10 @@ public class InCartItem {
     public void setItemInfo(String itemInfo) {
         this.itemInfo = itemInfo;
     }
+    public void setItemNumber(){
+        int i = 0;
+        i = Integer.parseInt(this.itemNumber);
+        i++;
+        this.itemNumber = String.valueOf(i);
+    }
 }

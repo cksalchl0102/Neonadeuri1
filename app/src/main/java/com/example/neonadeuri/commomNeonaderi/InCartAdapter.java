@@ -46,10 +46,15 @@ public class InCartAdapter extends BaseAdapter {
         return listViewInCartItemList.get(i).getItemPrice();
     }
 
+    public String getName(int i) {
+        return listViewInCartItemList.get(i).getItemName();
+    }
+
     public String getNumber(int i) {
         return listViewInCartItemList.get(i).getItemNumber();
     }
-    public String getInfo(int i){
+
+    public String getInfo(int i) {
         return listViewInCartItemList.get(i).getItemInfo();
     }
 
@@ -102,5 +107,7 @@ public class InCartAdapter extends BaseAdapter {
 
         listViewInCartItemList.add(inCartItem);
     }
-
+    public void plusItemNumber(int i){
+        listViewInCartItemList.get(i).setItemNumber();
+    }
 }

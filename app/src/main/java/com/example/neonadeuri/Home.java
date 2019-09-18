@@ -42,6 +42,7 @@ import android.widget.Toast;
 import com.example.neonadeuri.commomNeonaderi.ApiService;
 import com.example.neonadeuri.commomNeonaderi.CustomTask;
 import com.example.neonadeuri.commomNeonaderi.InCartAdapter;
+import com.example.neonadeuri.commomNeonaderi.InCartItem;
 import com.example.neonadeuri.commomNeonaderi.Message;
 import com.example.neonadeuri.commomNeonaderi.ProductDTO;
 import com.example.neonadeuri.commomNeonaderi.ProductTask;
@@ -88,7 +89,7 @@ public class Home extends AppCompatActivity {
 
     String[] piForC;
     String[] ApiForC;
-    String [] BpiForC;
+    String[] BpiForC;
 
     TextView hansungProductName;
     TextView hansungProductPrice;
@@ -169,24 +170,66 @@ public class Home extends AppCompatActivity {
         inCartAdapter.addItem("르꼬끄 백팩", "10", "1", "-");
 
         barcode = findViewById(R.id.barcode);
-        barcode.setFocusableInTouchMode(true);
+        barcode.setInputType(0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(barcode.getWindowToken(), 0);
+        forFirstBudget();
+        /*barcode.setFocusableInTouchMode(true);
         barcode.requestFocus();
         barcode.setInputType(0);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-        checkProduct("88010193");
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);*/
+        //checkProduct("88010193");
+        //compareProducts(productNameForCompare);
+
         barcode.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
 
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //if (barcode.getText().toString().length() > 7) {
+                //  barcodeString = barcode.getText().toString();
+                //checkProduct(barcodeString);
+                // Log.i("chanmi","pi[0] = "+pi[0]);
+                //productNameForCompare = pi[1].toString();
+                //compareProducts(productNameForCompare);
+
+                  /*  if (compareProducts(barcodeString)) {
+                        settingCompareTable();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"가격비교 불가",Toast.LENGTH_LONG).show();
+                    }
+*/
+                // Log.i("chanmi", barcodeString);
+                    /*if(checkProduct(barcodeString)){
+                        inCartAdapter.addItem(pi[1],pi[2],"1",pi[3]);
+                        inCartAdapter.notifyDataSetChanged();*/
+                //}
+
+                //}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (barcode.getText().toString().length() > 7) {
                     barcodeString = barcode.getText().toString();
                     checkProduct(barcodeString);
-                   // Log.i("chanmi","pi[0] = "+pi[0]);
+                    compareProducts(productNameForCompare);
+                    focusBarcode();
+                    settingCompareTable(piForC, ApiForC, BpiForC);
+                    if (checkItemNumber(pi[1])) {
+                        //일치하는게 있다면 true;
+                        plusItemNumber(pi[1]);
+                    } else {
+                        //새로운 상품이라면....
+                        listAddItem(pi);
+                        inCartAdapter.notifyDataSetChanged();
+                    }
+
+                    // Log.i("chanmi","pi[0] = "+pi[0]);
                     //productNameForCompare = pi[1].toString();
                     //compareProducts(productNameForCompare);
 
@@ -203,11 +246,8 @@ public class Home extends AppCompatActivity {
                     //}
 
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+                // clearBarcodeText();
+                Log.i("chanmi","in afterTextChanged barcodeEditText : "+barcode.getText());
             }
         });
 
@@ -224,6 +264,8 @@ public class Home extends AppCompatActivity {
         BProductPrice = findViewById(R.id.B_product_price_editText);
         BCompareResult = findViewById(R.id.B_product_result_editText);
 
+        //settingCompareTable(piForC, ApiForC, BpiForC);
+        //listAddItem(pi);
     }
 
     //로그아웃
@@ -253,6 +295,7 @@ public class Home extends AppCompatActivity {
             curMoney = 0;
             inCartAdapter.notifyDataSetInvalidated();
             inCartAdapter.notifyDataSetChanged();
+            Log.i("chanmi", String.valueOf(inCartAdapter.getCount()));
             for (int i = 0; i < inCartAdapter.getCount(); i++) {
 
                 if (inCartAdapter.getNumber(i) != "1") {
@@ -261,16 +304,23 @@ public class Home extends AppCompatActivity {
                         cnt = cnt / 2;
                     }
                     curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i)) * cnt;
-                } else {
-                    curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i));
                 }
+                curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i));
+
+                Log.i("chanmi", i + "번쨰 : " + inCartAdapter.getPrice(i));
+                Log.i("chanmi", "현재 총 금액 : " + curMoney);
             }
             curMoneyTextView.setText(String.valueOf(curMoney) + "원");
+            Log.i("chanmi", String.valueOf(curMoney));
             //seekBar.setProgress(seekBar.getProgress()+curMoney);
             seekBar.setProgress(curMoney);
             /*curMoney = calculMoney();
             curMoneyTextView.setText(String.valueOf(curMoney));
             seekBar.setProgress(curMoney);*/
+            clearBarcodeText();
+            focusBarcode();
+
+            Log.i("chanmi","in refreshItemInCartListener : "+barcode.getText());
         }
     };
 
@@ -284,15 +334,20 @@ public class Home extends AppCompatActivity {
     View.OnClickListener imageChangeButtonEvent = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            switch (view.getId()) {
+          /*  switch (view.getId()) {
                 case R.id.buttonEventItemCall:
                     imageView.setImageResource(R.drawable.bulgogi);
                     break;
                 case R.id.buttonRecoItemCall:
                     imageView.setImageResource(R.drawable.bulgogi);
-
                     break;
-            }
+            }*/
+            if (view.getId() == R.id.buttonEventItemCall) {
+                imageView.setImageResource(R.drawable.bulgogi);
+            } else
+                imageView.setImageResource(R.drawable.bulgogi);
+
+            focusBarcode();
         }
     };
 
@@ -339,6 +394,7 @@ public class Home extends AppCompatActivity {
             }
         });
         builder.show();
+        focusBarcode();
     }
 
     /*
@@ -396,7 +452,9 @@ public class Home extends AppCompatActivity {
         return result;
     }
 
+
     public boolean checkProduct(String searchbarcode) {
+        /*
         Log.e("chanmi", searchbarcode);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://113.198.84.24:8080/")
@@ -416,8 +474,12 @@ public class Home extends AppCompatActivity {
 
                     @Override
                     public void onNext(Response<ResponseBody> response) {
+
                         try {
                             Log.i("chanmi", response.body().string());
+                            pi = response.body().string().split("/");
+                            Log.i("chanmi", pi[0]);
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -433,33 +495,45 @@ public class Home extends AppCompatActivity {
                     public void onComplete() {
 
                     }
-                });
+                });*/
 
-//        String resultt = "";
-//        try {
-//            //  sendMsg = "productId=" + strings[0] + "&type=" + strings[1];
-//            resultt = new ProductTask().execute(searchbarcode, "getProducts").get();
-//            //pi[1] = name;
-//            //returns = "getProductOK" + "\t" + name + "\t" + price + "\t" + info;
-//            pi = resultt.split("/");
-//            Log.i("chanmi","checkProduct result="+resultt);
-//            Log.i("chanmi","checkProduct pi="+pi[0]);
-//            Log.i("chanmi", "ProductTask()..execute() OK ");
-//            Log.i("chanmi", pi[0]);
-//
-//            if (pi[0].equals("getProductOK")) {
-//                return true;
-//            } else {
-//                Message.information(Home.this, "알림", "등록된 상품이 아닙니다.");
-//                barcodeString = "";
-//                barcode.setText("");
-//                return false;
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        String resultt = "";
+        try {
+            //  sendMsg = "productId=" + strings[0] + "&type=" + strings[1];
+            resultt = new ProductTask().execute(searchbarcode, "getProducts").get();
+            //pi[1] = name;
+            //returns = "getProductOK" + "\t" + name + "\t" + price + "\t" + info;
+            pi = resultt.split("/");
+            Log.i("chanmi", "checkProduct result=" + resultt);
+            Log.i("chanmi", "checkProduct pi=" + pi[0] + ", " + pi[1]);
+            Log.i("chanmi", "ProductTask()..execute() OK ");
+            Log.i("chanmi", pi[0]);
+
+
+            if (pi[0].equals("getProductOK")) {
+                //리스트에 아이템 추가
+
+                //비교대상 아이템 이름 저장.
+                productNameForCompare = null;
+                productNameForCompare = pi[1];
+
+
+                barcodeString = "";
+                barcode.setText("");
+                Log.i("chanmi", "barcode :" + barcode.getText().toString());
+                return true;
+            } else {
+                Message.information(Home.this, "알림", "등록된 상품이 아닙니다.");
+                barcodeString = "";
+                barcode.setText("");
+                return false;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
 
         return false;
     }
@@ -473,17 +547,39 @@ public class Home extends AppCompatActivity {
         try {
             // sendMsg = "pname=" + strings[0] + "&type=" + strings[1];
             result2 = new ProductsTask().execute(productName, "productsCompareFromHansung").get();
-        /*    result3 = new ProductsTask().execute(productName, "productsCompareFromA").get();
-            result4 = new ProductsTask().execute(productName, "productsCompareFromB").get();*/
+            result3 = new ProductsTask().execute(productName, "productsCompareFromA").get();
+            result4 = new ProductsTask().execute(productName, "productsCompareFromB").get();
 
-            //returns="loadHansungProductOK"+"\t"+hansungName+"\t"+hansungPrice;
+            // returns="loadHansungProductOK"+"\t"+hansungName+"\t"+hansungPrice;
             piForC = result2.split("\t");
-            Log.i("chanmi",piForC[0]);
-            if(piForC[0].equals("loadHansungProductOK")){
-                return true;
-            }else{
-                Message.information(Home.this,"알림","등록된 상품이 아닙니다.");
+            if (piForC.length == 3) {
+                Log.i("chanmi", "piForC : " + piForC[0] + ", " + piForC[1] + ", " + piForC[2]);
             }
+            ApiForC = result3.split("\t");
+            if (ApiForC.length == 3) {
+                Log.i("chanmi", "ApiForC : " + ApiForC[0] + ", " + ApiForC[1] + ", " + ApiForC[2]);
+            }
+            BpiForC = result4.split("\t");
+            if (BpiForC.length == 3) {
+                Log.i("chanmi", "BpiForC : " + BpiForC[0] + ", " + BpiForC[1] + ", " + BpiForC[2]);
+            }
+
+            if (piForC[0].equals("loadHansungProductOK")) {
+                focusBarcode();
+                return true;
+            } else if (piForC[0].equals("loadHansungProductFail")) {
+                Message.information(Home.this, "알림", "등록된 상품이 아닙니다.");
+                return false;
+            }
+
+           /* Log.i("chanmi","piForC : "+ piForC[0]+piForC[1]+piForC[2]);
+            Log.i("chanmi","ApiForC : "+ ApiForC[0]+ApiForC[1]+ApiForC[2]);
+            Log.i("chanmi","BpiForC : "+ BpiForC[0]+BpiForC[1]+BpiForC[2]);*/
+            /*if (piForC[0].equals("loadHansungProductOK")) {
+                return true;
+            } else {
+                Message.information(Home.this, "알림", "등록된 상품이 아닙니다.");
+            }*/
 /*
 
             ApiForC = result3.split("\t");
@@ -495,16 +591,107 @@ public class Home extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        focusBarcode();
         return false;
     }
-/*
-    public void settingCompareTable() {
+
+    public void settingCompareTable(String[] hs, String[] as, String[] bs) {
         int h = 0, a = 0, b = 0;
-        int big, mid, small;
+        h = Integer.parseInt(hs[2]);
+        a = Integer.parseInt(as[2]);
+        b = Integer.parseInt(bs[2]);
+        int big = 0, mid = 0, small = 0;
+
+        big = (h > a) && (h > b) ? h : (b > a ? b : a);
+        small = (a > h) && (b > h) ? h : (a > b ? b : a);
+        mid = (h > a) ? ((h > b) ? ((a > b) ? a : b) : h) : ((a > b) ? ((h > b) ? h : b) : a);
 
 
-        // returns = result + "\t" + result2 + "\t" + result3 + "\t" + hansungName + "\t" + hansungPrice + "\t" + AName
-        // + "\t" + APrice + "\t" + BName + "\t" + BPrice;*//*
+        hansungProductName.setText(hs[1]);
+        hansungProductPrice.setText(hs[2]);
+        AProductName.setText(as[1]);
+        AProductPrice.setText(as[2]);
+        BProductName.setText(bs[1]);
+        BProductPrice.setText(bs[2]);
+
+        if (big == mid && mid == small) {
+            hansungCompareResult.setText("가장 싸다.");
+            ACompareResult.setText("가장 싸다.");
+            BCompareResult.setText("가장 싸다.");
+        } else if (small == mid && mid != big) {
+            if (big == h) {
+                hansungCompareResult.setText("가장 비싸다.");
+                ACompareResult.setText("가장 싸다.");
+                BCompareResult.setText("가장 싸다.");
+            } else if (big == a) {
+                hansungCompareResult.setText("가장 싸다.");
+                ACompareResult.setText("가장 비싸다.");
+                BCompareResult.setText("가장 싸다.");
+            } else {
+                hansungCompareResult.setText("가장 싸다.");
+                ACompareResult.setText("가장 싸다.");
+                BCompareResult.setText("가장 비싸다.");
+            }
+        } else if (big == mid && mid != small) {
+            if (small == h) {
+                hansungCompareResult.setText("가장 싸다.");
+                ACompareResult.setText("가장 비싸다.");
+                BCompareResult.setText("가장 비싸다.");
+            } else if (small == a) {
+                hansungCompareResult.setText("가장 비싸다.");
+                ACompareResult.setText("가장 싸다.");
+                BCompareResult.setText("가장 비싸다.");
+            } else if (small == b) {
+                hansungCompareResult.setText("가장 비싸다.");
+                ACompareResult.setText("가장 비싸다.");
+                BCompareResult.setText("가장 싸다.");
+            }
+
+        } else if (big != mid && mid != small) {
+            if (big == h) {
+                if (mid == a) {
+                    hansungCompareResult.setText("가장 비싸다.");
+                    ACompareResult.setText("중간");
+                    BCompareResult.setText("가장 싸다.");
+                } else {
+                    hansungCompareResult.setText("가장 비싸다.");
+                    ACompareResult.setText("가장 싸다.");
+                    BCompareResult.setText("중간");
+                }
+            } else if (mid == h) {
+                if (big == a) {
+                    hansungCompareResult.setText("중간");
+                    ACompareResult.setText("가장 비싸다.");
+                    BCompareResult.setText("가장 싸다.");
+                } else {
+                    hansungCompareResult.setText("중간");
+                    ACompareResult.setText("가장 싸다.");
+                    BCompareResult.setText("가장 비싸다.");
+                }
+            } else {//small == h
+                if (big == a) {
+                    hansungCompareResult.setText("가장 싸다");
+                    ACompareResult.setText("가장 비싸다.");
+                    BCompareResult.setText("중간");
+                } else {
+                    hansungCompareResult.setText("중간");
+                    ACompareResult.setText("가장 싸다.");
+                    BCompareResult.setText("가장 비싸다.");
+                }
+            }
+
+        }
+
+    }
+
+    /*
+        public void settingCompareTable() {
+            int h = 0, a = 0, b = 0;
+            int big, mid, small;
+
+
+            // returns = result + "\t" + result2 + "\t" + result3 + "\t" + hansungName + "\t" + hansungPrice + "\t" + AName
+            // + "\t" + APrice + "\t" + BName + "\t" + BPrice;*//*
 
         h = Integer.parseInt(compareResult[4]);
         a = Integer.parseInt(compareResult[6]);
@@ -591,4 +778,85 @@ public class Home extends AppCompatActivity {
 
 
     }*/
+    public void listAddItem(String[] args) {
+        String name, price, num, info;
+        name = args[1];
+        price = args[2];
+        info = args[3];
+        num = "1";
+        InCartItem inCartItem = new InCartItem();
+        inCartItem.setItemName(name);
+        inCartItem.setItemPrice(price);
+        inCartItem.setItemInfo(info);
+        inCartItem.setItemNumber(num);
+
+        //public void addItem(String name, String price, String number, String info)
+        inCartAdapter.addItem(name, price, num, info);
+        refreshItemInCart.performClick();
+        clearBarcodeText();
+        focusBarcode();
+    }
+
+    public void clearBarcodeText() {
+        barcode.setText(null);
+    }
+
+    public void youAddItemQ(String name) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.MyAlertDialogStyle);
+        builder.setTitle("상품 추가");
+        builder.setMessage(name + "상품을 추가하시겠습니까?");
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.setNegativeButton("취소", null);
+        builder.show();
+    }
+
+    boolean checkItemNumber(String name) {
+        for (int i = 0; i < inCartAdapter.getCount(); i++) {
+            if (name.equals(inCartAdapter.getName(i))) {
+                //일치하는게 있다면.
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void plusItemNumber(String name) {
+        for (int i = 0; i < inCartAdapter.getCount(); i++) {
+            if (name.equals(inCartAdapter.getName(i))) {
+                inCartAdapter.plusItemNumber(i);
+            }
+        }
+        inCartAdapter.notifyDataSetChanged();
+        refreshItemInCart.performClick();
+    }
+
+    public void forFirstBudget() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.MyAlertDialogStyle);
+        builder.setTitle("예산안 입력하기");
+        builder.setMessage("먼저 예산안을 입력해주세요");
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                setting_money_dialog_show();
+            }
+        });
+        builder.show();
+        focusBarcode();
+    }
+
+    public void focusBarcode() {
+        barcodeString = "";
+        barcode.setText("");
+        barcode.setFocusableInTouchMode(true);
+        barcode.requestFocus();
+        barcode.setInputType(0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        imm.hideSoftInputFromWindow(barcode.getWindowToken(), 0);
+    }
 }
