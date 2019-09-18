@@ -214,20 +214,28 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (barcode.getText().toString().length() > 7) {
+                if (barcode.getText().toString().length() == 8) {
                     barcodeString = barcode.getText().toString();
-                    checkProduct(barcodeString);
-                    compareProducts(productNameForCompare);
-                    focusBarcode();
-                    settingCompareTable(piForC, ApiForC, BpiForC);
-                    if (checkItemNumber(pi[1])) {
-                        //일치하는게 있다면 true;
-                        plusItemNumber(pi[1]);
-                    } else {
-                        //새로운 상품이라면....
-                        listAddItem(pi);
-                        inCartAdapter.notifyDataSetChanged();
+                    if(checkProduct(barcodeString)){
+                        compareProducts(productNameForCompare);
+                        settingCompareTable(piForC, ApiForC, BpiForC);
+                        if (checkItemNumber(pi[1])) {
+                            //일치하는게 있다면 true;
+                            plusItemNumber(pi[1]);
+                        } else {
+                            //새로운 상품이라면....
+                            listAddItem(pi);
+                            inCartAdapter.notifyDataSetChanged();
+                        }
+                        focusBarcode();
+                    }else{
+                        focusBarcode();
+                        Toast.makeText(Home.this,"등록된 상품이 아닙니다.",Toast.LENGTH_LONG).show();
                     }
+                    /*compareProducts(productNameForCompare);
+                    focusBarcode();
+                    settingCompareTable(piForC, ApiForC, BpiForC);*/
+
 
                     // Log.i("chanmi","pi[0] = "+pi[0]);
                     //productNameForCompare = pi[1].toString();
@@ -248,6 +256,7 @@ public class Home extends AppCompatActivity {
                 }
                 // clearBarcodeText();
                 Log.i("chanmi","in afterTextChanged barcodeEditText : "+barcode.getText());
+
             }
         });
 
@@ -504,10 +513,10 @@ public class Home extends AppCompatActivity {
             //pi[1] = name;
             //returns = "getProductOK" + "\t" + name + "\t" + price + "\t" + info;
             pi = resultt.split("/");
-            Log.i("chanmi", "checkProduct result=" + resultt);
+          /*  Log.i("chanmi", "checkProduct result=" + resultt);
             Log.i("chanmi", "checkProduct pi=" + pi[0] + ", " + pi[1]);
             Log.i("chanmi", "ProductTask()..execute() OK ");
-            Log.i("chanmi", pi[0]);
+            Log.i("chanmi", pi[0]);*/
 
 
             if (pi[0].equals("getProductOK")) {
@@ -568,7 +577,11 @@ public class Home extends AppCompatActivity {
                 focusBarcode();
                 return true;
             } else if (piForC[0].equals("loadHansungProductFail")) {
+                focusBarcode();
                 Message.information(Home.this, "알림", "등록된 상품이 아닙니다.");
+                return false;
+            }else{
+                focusBarcode();
                 return false;
             }
 
