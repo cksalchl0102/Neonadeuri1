@@ -101,6 +101,8 @@ public class Home extends AppCompatActivity {
     TextView BProductPrice;
     TextView BCompareResult;
 
+    View focusView=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent(); //데이터 수신
@@ -171,6 +173,8 @@ public class Home extends AppCompatActivity {
 
         barcode = findViewById(R.id.barcode);
         barcode.setInputType(0);
+        /*barcode.setFocusableInTouchMode(true);
+        barcode.requestFocus();*/
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(barcode.getWindowToken(), 0);
         forFirstBudget();
@@ -222,10 +226,26 @@ public class Home extends AppCompatActivity {
                         if (checkItemNumber(pi[1])) {
                             //일치하는게 있다면 true;
                             plusItemNumber(pi[1]);
+                            focusBarcode();
+                            if(focusView.equals(R.id.barcode)){
+                                Log.i("focus","in old product : success");
+                            }else{
+                                Log.i("focus","in old product : Fail");
+                            }
                         } else {
                             //새로운 상품이라면....
                             listAddItem(pi);
                             inCartAdapter.notifyDataSetChanged();
+                            focusBarcode();
+                           /* barcode.setFocusableInTouchMode(true);
+                            barcode.requestFocus();*/
+
+                            if(focusView.equals(R.id.barcode)){
+                                Log.i("focus","in new product : success");
+                            }else{
+                                Log.i("focus","in new product : Fail");
+                            }
+
                         }
                         focusBarcode();
                     }else{
@@ -256,7 +276,7 @@ public class Home extends AppCompatActivity {
                 }
                 // clearBarcodeText();
                 Log.i("chanmi","in afterTextChanged barcodeEditText : "+barcode.getText());
-
+               // focusBarcode();
             }
         });
 
@@ -368,6 +388,7 @@ public class Home extends AppCompatActivity {
         int width = seekBar.getWidth() - 2 * offset;
         int answer = ((int) (width * percent + offset - curMoneyTextView.getWidth() / 2));
         curMoneyTextView.setX(answer);
+        //focusBarcode();
     }
 
     public void setting_money_dialog_show() {
@@ -529,6 +550,8 @@ public class Home extends AppCompatActivity {
 
                 barcodeString = "";
                 barcode.setText("");
+               /* barcode.setFocusableInTouchMode(true);
+                barcode.requestFocus();*/
                 Log.i("chanmi", "barcode :" + barcode.getText().toString());
                 return true;
             } else {
@@ -575,6 +598,7 @@ public class Home extends AppCompatActivity {
 
             if (piForC[0].equals("loadHansungProductOK")) {
                 focusBarcode();
+
                 return true;
             } else if (piForC[0].equals("loadHansungProductFail")) {
                 focusBarcode();
@@ -806,8 +830,12 @@ public class Home extends AppCompatActivity {
         //public void addItem(String name, String price, String number, String info)
         inCartAdapter.addItem(name, price, num, info);
         refreshItemInCart.performClick();
-        clearBarcodeText();
-        focusBarcode();
+      /*  clearBarcodeText();
+        focusBarcode();*/
+      focusBarcode();
+
+      barcode.setFocusableInTouchMode(true);
+      barcode.requestFocus();
     }
 
     public void clearBarcodeText() {
@@ -846,6 +874,7 @@ public class Home extends AppCompatActivity {
         }
         inCartAdapter.notifyDataSetChanged();
         refreshItemInCart.performClick();
+        focusBarcode();
     }
 
     public void forFirstBudget() {
@@ -868,6 +897,7 @@ public class Home extends AppCompatActivity {
         barcode.setFocusableInTouchMode(true);
         barcode.requestFocus();
         barcode.setInputType(0);
+        focusView = getCurrentFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         imm.hideSoftInputFromWindow(barcode.getWindowToken(), 0);
