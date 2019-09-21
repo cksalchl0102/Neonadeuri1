@@ -19,7 +19,7 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/study_v1/neonaduriAdd.jsp")
     Observable<Response<ResponseBody>> neonaduriAdd(
-            @Field("productId") String productId,
+            @Field("phoneNumber") String phoneNumber,
             @Field("type") String type
     );
 }

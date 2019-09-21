@@ -19,6 +19,25 @@ import com.example.neonadeuri.commomNeonaderi.*;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 public class Login extends AppCompatActivity {
 
     //이벤트 사용자의 번호 입력.
@@ -188,18 +207,65 @@ public class Login extends AppCompatActivity {
     };
 
     public boolean checkUser(String phoneNumber) {
+/*
+        Log.e("chanmi", phoneNumber);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.0.15:5555/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(new OkHttpClient())
+                .build();
+
+        ApiService service = retrofit.create(ApiService.class);
+        service.neonaduriAdd(phoneNumber, "login")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response<ResponseBody>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Response<ResponseBody> response) {
+
+                        try {
+                            Log.i("chanmi", response.body().string());
+                            oj = response.body().string().split("\t");
+                            Log.i("chanmi", oj[0]);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });*/
         String result = "";
         try {
             result = new CustomTask().execute(phoneNumber, "", "", "", "login").get();
-            oj = result.split("\t");
-            Log.i("chanmi", "CustomTask().execute : " + result + "OK");
-            Log.i("chanmi","oj[1]="+oj[1]);
-            if (oj[0].equals("loginOK")) {
-                return true;
-            } else if (oj[0].equals("wrongPhoneNumber")) {
-                Message.information(Login.this, "알림", "전화번호를 확인해주세요.");
-                return false;
-            }
+            if (result != null) {
+                oj = result.split("\t");
+                Log.i("chanmi", "CustomTask().execute : " + result + "OK");
+                Log.i("chanmi", "oj[1]=" + oj[1]);
+                if (oj[0].equals("loginOK")) {
+                    return true;
+                } else if (oj[0].equals("wrongPhoneNumber")) {
+                    Message.information(Login.this, "알림", "전화번호를 확인해주세요.");
+                    return false;
+                }
+            } else
+                Log.i("chanmi", "회원 값을 받지 못함");
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

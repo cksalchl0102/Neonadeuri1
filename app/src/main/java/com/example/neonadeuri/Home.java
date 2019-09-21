@@ -111,12 +111,12 @@ public class Home extends AppCompatActivity {
         setTitle(userName + ", " + userPhoneNum + "님의 접속");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        buttonEventItem = findViewById(R.id.buttonEventItemCall);
+        /*buttonEventItem = findViewById(R.id.buttonEventItemCall);
         buttonRecoItem = findViewById(R.id.buttonRecoItemCall);
-        imageView = findViewById(R.id.imageView);
-
+        imageView = findViewById(R.id.imageView);*/
+/*
         buttonEventItem.setOnClickListener(imageChangeButtonEvent);
-        buttonRecoItem.setOnClickListener(imageChangeButtonEvent);
+        buttonRecoItem.setOnClickListener(imageChangeButtonEvent);*/
 
         //refreshItemInCart
         refreshItemInCart = findViewById(R.id.refreshItemInCart);
@@ -163,6 +163,7 @@ public class Home extends AppCompatActivity {
 
             }
         });
+/*
 
         inCartAdapter.addItem("iPhone XS", "10", "1", "- ");
         inCartAdapter.addItem("팜스 사과 3kg", "10", "1", "할인중");
@@ -170,6 +171,7 @@ public class Home extends AppCompatActivity {
         inCartAdapter.addItem("홍삼정", "10", "1", "-");
         inCartAdapter.addItem("이니스프리 선크림", "10", "2", "1+1 행사중");
         inCartAdapter.addItem("르꼬끄 백팩", "10", "1", "-");
+*/
 
         barcode = findViewById(R.id.barcode);
         barcode.setInputType(0);
@@ -325,11 +327,13 @@ public class Home extends AppCompatActivity {
             inCartAdapter.notifyDataSetInvalidated();
             inCartAdapter.notifyDataSetChanged();
             Log.i("chanmi", String.valueOf(inCartAdapter.getCount()));
-            for (int i = 0; i < inCartAdapter.getCount(); i++) {
 
-                if (inCartAdapter.getNumber(i) != "1") {
+            //이제 물품 안에 담긴 금액을 계산해본다.
+            for (int i = 0; i < inCartAdapter.getCount(); i++) {//리스트 개수만큼 for문을 돌림
+
+                if (inCartAdapter.getNumber(i) != "1") {//수량이 1개라면
                     int cnt = Integer.parseInt(inCartAdapter.getNumber(i));//
-                    if (inCartAdapter.getInfo(i) == "1+1 행사중") {
+                    if (inCartAdapter.getInfo(i) == "1+1 행사중") {//info가 1+1이라면
                         cnt = cnt / 2;
                     }
                     curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i)) * cnt;
@@ -359,18 +363,18 @@ public class Home extends AppCompatActivity {
             setting_money_dialog_show();
         }
     };
-
+/*
     View.OnClickListener imageChangeButtonEvent = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          /*  switch (view.getId()) {
+          *//*  switch (view.getId()) {
                 case R.id.buttonEventItemCall:
                     imageView.setImageResource(R.drawable.bulgogi);
                     break;
                 case R.id.buttonRecoItemCall:
                     imageView.setImageResource(R.drawable.bulgogi);
                     break;
-            }*/
+            }*//*
             if (view.getId() == R.id.buttonEventItemCall) {
                 imageView.setImageResource(R.drawable.bulgogi);
             } else
@@ -378,7 +382,7 @@ public class Home extends AppCompatActivity {
 
             focusBarcode();
         }
-    };
+    };*/
 
     private void seekBarSetText() {
         int progress = seekBar.getProgress();
