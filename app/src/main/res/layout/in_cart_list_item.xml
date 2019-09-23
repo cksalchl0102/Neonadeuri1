@@ -39,7 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/minus"
+        android:background="@drawable/minus2"
         android:maxHeight="32px"
         android:maxWidth="32px"
         android:adjustViewBounds="true"
