@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Register"
-    android:background="@drawable/background2">
+    android:background="@drawable/background">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,10 @@
                 android:layout_height="wrap_content"
                 android:text="전화번호"
                 android:textSize="20sp" />
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
             <EditText
                 android:id="@+id/register_PhoneNumber"
                 android:layout_width="wrap_content"
@@ -32,6 +35,18 @@
                 android:hint="당신의 전화번호를  입력해주세요."
                 android:textColor="#356a4c"
                 android:textColorHint="#356a4c" />
+    <ImageButton
+        android:id="@+id/register_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/resetj"
+        android:maxHeight="50dp"
+        android:maxWidth="50dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter">
+
+    </ImageButton>
+</LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,6 +76,7 @@
                 android:id="@+id/register_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="나이를 입력해주세요."/>
         </LinearLayout>
         <LinearLayout
@@ -102,20 +118,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="인증코드"
-                android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/register_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="아래 링크를 통해 얻을 수 있습니다."
-                android:textColor="#356a4c"
-                android:textColorHint="#346a4c" />
         </LinearLayout>
 
         <Button

@@ -6,9 +6,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,11 +25,14 @@ public class Register extends AppCompatActivity {
     CheckBox check_Man, check_Woman;
     Button registerButton, goLoginActivityButton;
     String phoneNumber, name, age, gender;
+    InputMethodManager imm;
+    ImageButton reset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+        imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         phoneEdit = findViewById(R.id.register_PhoneNumber);
         nameEdit = findViewById(R.id.register_name);
         ageEdit = findViewById(R.id.register_age);
@@ -41,6 +46,9 @@ public class Register extends AppCompatActivity {
         registerButton.setOnClickListener(Listener);
         goLoginActivityButton.setOnClickListener(Listener);
 
+        reset = findViewById(R.id.register_reset);
+
+
         //phone EditText 의 편집 리스너
         phoneEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -50,6 +58,11 @@ public class Register extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 int cnt = phoneEdit.getText().length();
                 if (cnt == 3 || cnt == 8) {
                     phoneEdit.append("-");
@@ -58,11 +71,6 @@ public class Register extends AppCompatActivity {
                     // Message.information("입력 수 초과","핸드폰 길이 초과입니다");
                     Toast.makeText(Register.this, "더 이상 입력하실 수 없습니다..", Toast.LENGTH_LONG).show();
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
             }
         });
     }
@@ -90,15 +98,21 @@ public class Register extends AppCompatActivity {
                 case R.id.register_check_man:
                     check_Woman.setChecked(false);
                     gender = "Man";
+                    imm.hideSoftInputFromWindow(check_Man.getWindowToken(), 0);
                     break;
                 case R.id.register_check_woman:
                     check_Man.setChecked(false);
                     gender = "Woman";
+                    imm.hideSoftInputFromWindow(check_Woman.getWindowToken(), 0);
                     break;
                 case R.id.register_goToLogin_button:
                     Intent intent = new Intent(Register.this, Login.class);
                     startActivity(intent);
                     finish();
+                    break;
+                case R.id.register_reset:
+                    phoneEdit.setText("");
+                    break;
             }
         }
     };

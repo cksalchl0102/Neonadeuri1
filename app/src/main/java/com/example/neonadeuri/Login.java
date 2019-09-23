@@ -252,14 +252,15 @@ public class Login extends AppCompatActivity {
         String result = "";
         try {
             result = new CustomTask().execute(phoneNumber, "", "", "", "login").get();
-            if (result != null) {
+            if (result!= null) {
                 oj = result.split("\t");
-                Log.i("chanmi", "CustomTask().execute : " + result + "OK");
-                Log.i("chanmi", "oj[1]=" + oj[1]);
                 if (oj[0].equals("loginOK")) {
+                    Log.i("chanmi", "CustomTask().execute : " + result + "OK");
+                    Log.i("chanmi", "oj[1]=" + oj[1]);
                     return true;
                 } else if (oj[0].equals("wrongPhoneNumber")) {
                     Message.information(Login.this, "알림", "전화번호를 확인해주세요.");
+                    phoneNumberTextView.setText(null);
                     return false;
                 }
             } else

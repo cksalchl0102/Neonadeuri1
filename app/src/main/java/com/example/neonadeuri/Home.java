@@ -101,14 +101,15 @@ public class Home extends AppCompatActivity {
     TextView BProductPrice;
     TextView BCompareResult;
 
-    View focusView=null;
+    View focusView = null;
+    String[] tmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent(); //데이터 수신
         String userPhoneNum = intent.getExtras().getString("phoneNumber");
         String userName = intent.getExtras().getString("name");
-        setTitle(userName + ", " + userPhoneNum + "님의 접속");
+        setTitle(userName + ", " + userPhoneNum + "접속");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         /*buttonEventItem = findViewById(R.id.buttonEventItemCall);
@@ -117,6 +118,7 @@ public class Home extends AppCompatActivity {
 /*
         buttonEventItem.setOnClickListener(imageChangeButtonEvent);
         buttonRecoItem.setOnClickListener(imageChangeButtonEvent);*/
+        tmp = new String[]{"00000001", "00000005", "00000005", "00000024", "00000045", "00000045", "00000045"};
 
         //refreshItemInCart
         refreshItemInCart = findViewById(R.id.refreshItemInCart);
@@ -172,7 +174,11 @@ public class Home extends AppCompatActivity {
         inCartAdapter.addItem("이니스프리 선크림", "10", "2", "1+1 행사중");
         inCartAdapter.addItem("르꼬끄 백팩", "10", "1", "-");
 */
-
+        inCartAdapter.addItem(" 허니 버터 아몬드","1200","3","30% discount");
+        inCartAdapter.addItem("카카오프렌즈 아이스 텀블러","12000","2","1+1");
+        inCartAdapter.addItem("임금님표  이천쌀","40000","1","20% discount");
+        inCartAdapter.addItem("종가집 보쌈 무말랭이","4000","3","1+1");
+        inCartAdapter.addItem("로지텍G 게이밍 무선 마우스","107000","1","-");
         barcode = findViewById(R.id.barcode);
         barcode.setInputType(0);
         /*barcode.setFocusableInTouchMode(true);
@@ -186,6 +192,8 @@ public class Home extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);*/
         //checkProduct("88010193");
+
+
         //compareProducts(productNameForCompare);
 
         barcode.addTextChangedListener(new TextWatcher() {
@@ -222,17 +230,17 @@ public class Home extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (barcode.getText().toString().length() == 8) {
                     barcodeString = barcode.getText().toString();
-                    if(checkProduct(barcodeString)){
+                    if (checkProduct(barcodeString)) {
                         compareProducts(productNameForCompare);
                         settingCompareTable(piForC, ApiForC, BpiForC);
                         if (checkItemNumber(pi[1])) {
                             //일치하는게 있다면 true;
                             plusItemNumber(pi[1]);
                             focusBarcode();
-                            if(focusView.equals(R.id.barcode)){
-                                Log.i("focus","in old product : success");
-                            }else{
-                                Log.i("focus","in old product : Fail");
+                            if (focusView.equals(R.id.barcode)) {
+                                Log.i("focus", "in old product : success");
+                            } else {
+                                Log.i("focus", "in old product : Fail");
                             }
                         } else {
                             //새로운 상품이라면....
@@ -242,17 +250,17 @@ public class Home extends AppCompatActivity {
                            /* barcode.setFocusableInTouchMode(true);
                             barcode.requestFocus();*/
 
-                            if(focusView.equals(R.id.barcode)){
-                                Log.i("focus","in new product : success");
-                            }else{
-                                Log.i("focus","in new product : Fail");
+                            if (focusView.equals(R.id.barcode)) {
+                                Log.i("focus", "in new product : success");
+                            } else {
+                                Log.i("focus", "in new product : Fail");
                             }
 
                         }
                         focusBarcode();
-                    }else{
+                    } else {
                         focusBarcode();
-                        Toast.makeText(Home.this,"등록된 상품이 아닙니다.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(Home.this, "등록된 상품이 아닙니다.", Toast.LENGTH_LONG).show();
                     }
                     /*compareProducts(productNameForCompare);
                     focusBarcode();
@@ -277,8 +285,8 @@ public class Home extends AppCompatActivity {
 
                 }
                 // clearBarcodeText();
-                Log.i("chanmi","in afterTextChanged barcodeEditText : "+barcode.getText());
-               // focusBarcode();
+                Log.i("chanmi", "in afterTextChanged barcodeEditText : " + barcode.getText());
+                // focusBarcode();
             }
         });
 
@@ -322,38 +330,50 @@ public class Home extends AppCompatActivity {
     //카드 안에 있는 물품 새로 고침
     View.OnClickListener refreshItemInCartListener = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            curMoney = 0;
-            inCartAdapter.notifyDataSetInvalidated();
-            inCartAdapter.notifyDataSetChanged();
-            Log.i("chanmi", String.valueOf(inCartAdapter.getCount()));
+        public void onClick(View view) {/*
+            *//*checkProduct("00000001");
+            checkProduct("00000005");
+            checkProduct("00000005");
+            checkProduct("00000024");
+            checkProduct("00000045");
+            checkProduct("00000045");
+            checkProduct("00000045");*//*
+            for (int i = 0; i < tmp.length; i++) {
+                if (checkProduct(tmp[i])) {
+                    compareProducts(productNameForCompare);
+                    settingCompareTable(piForC, ApiForC, BpiForC);
+                    if (checkItemNumber(pi[1])) {
+                        //일치하는게 있다면 true;
+                        plusItemNumber(pi[1]);
+                        focusBarcode();
+                        if (focusView.equals(R.id.barcode)) {
+                            Log.i("focus", "in old product : success");
+                        } else {
+                            Log.i("focus", "in old product : Fail");
+                        }
+                    } else {
+                        //새로운 상품이라면....
+                        listAddItem(pi);
+                        inCartAdapter.notifyDataSetChanged();
+                        focusBarcode();
+                           *//* barcode.setFocusableInTouchMode(true);
+                            barcode.requestFocus();*//*
 
-            //이제 물품 안에 담긴 금액을 계산해본다.
-            for (int i = 0; i < inCartAdapter.getCount(); i++) {//리스트 개수만큼 for문을 돌림
+                        if (focusView.equals(R.id.barcode)) {
+                            Log.i("focus", "in new product : success");
+                        } else {
+                            Log.i("focus", "in new product : Fail");
+                        }
 
-                if (inCartAdapter.getNumber(i) != "1") {//수량이 1개라면
-                    int cnt = Integer.parseInt(inCartAdapter.getNumber(i));//
-                    if (inCartAdapter.getInfo(i) == "1+1 행사중") {//info가 1+1이라면
-                        cnt = cnt / 2;
                     }
-                    curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i)) * cnt;
+                    focusBarcode();
+                } else {
+                    focusBarcode();
+                    Toast.makeText(Home.this, "등록된 상품이 아닙니다.", Toast.LENGTH_LONG).show();
                 }
-                curMoney = curMoney + Integer.parseInt(inCartAdapter.getPrice(i));
-
-                Log.i("chanmi", i + "번쨰 : " + inCartAdapter.getPrice(i));
-                Log.i("chanmi", "현재 총 금액 : " + curMoney);
-            }
-            curMoneyTextView.setText(String.valueOf(curMoney) + "원");
-            Log.i("chanmi", String.valueOf(curMoney));
-            //seekBar.setProgress(seekBar.getProgress()+curMoney);
-            seekBar.setProgress(curMoney);
-            /*curMoney = calculMoney();
-            curMoneyTextView.setText(String.valueOf(curMoney));
-            seekBar.setProgress(curMoney);*/
-            clearBarcodeText();
-            focusBarcode();
-
-            Log.i("chanmi","in refreshItemInCartListener : "+barcode.getText());
+            }*/
+            calculateTotalMoney();
+            Log.i("chanmi", String.valueOf(calculateTotalMoney()));
         }
     };
 
@@ -608,7 +628,7 @@ public class Home extends AppCompatActivity {
                 focusBarcode();
                 Message.information(Home.this, "알림", "등록된 상품이 아닙니다.");
                 return false;
-            }else{
+            } else {
                 focusBarcode();
                 return false;
             }
@@ -836,10 +856,10 @@ public class Home extends AppCompatActivity {
         refreshItemInCart.performClick();
       /*  clearBarcodeText();
         focusBarcode();*/
-      focusBarcode();
+        focusBarcode();
 
-      barcode.setFocusableInTouchMode(true);
-      barcode.requestFocus();
+        barcode.setFocusableInTouchMode(true);
+        barcode.requestFocus();
     }
 
     public void clearBarcodeText() {
@@ -905,5 +925,47 @@ public class Home extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         imm.hideSoftInputFromWindow(barcode.getWindowToken(), 0);
+    }
+
+    public int calculateTotalMoney() {
+        curMoney = 0;
+        inCartAdapter.notifyDataSetInvalidated();
+        inCartAdapter.notifyDataSetChanged();
+        Log.i("chanmi", String.valueOf(inCartAdapter.getCount()));
+
+        for (int i = 0; i < inCartAdapter.getCount(); i++) {
+            int cntNum = Integer.parseInt(inCartAdapter.getNumber(i));
+            int curPrice = Integer.parseInt(inCartAdapter.getPrice(i));
+            String curInfo = inCartAdapter.getInfo(i);
+            if (curInfo.equals("1+1")) {
+                if (cntNum % 2 == 1) {
+                    cntNum /= 2;
+                    cntNum++;
+                } else
+                    cntNum /= 2;
+                curMoney = curMoney + curPrice * cntNum;
+            }
+            else if (curInfo.equals("20% discount")) {
+                curMoney = curMoney + (int)(curPrice * 0.8);
+            }
+            else if (curInfo.equals("30% discount")) {
+                curMoney = curMoney + (int)(curPrice * 0.7);
+            }
+            else {
+                curMoney += curPrice * cntNum;
+            }
+
+            Log.i("chanmi", i + "번째 : " + curPrice);
+            Log.i("chanmi", "현재 총 금액 : " + curMoney);
+        }
+        curMoneyTextView.setText(String.valueOf(curMoney) + "원");
+        Log.i("chanmi", String.valueOf(curMoney));
+        seekBar.setProgress(curMoney);
+        clearBarcodeText();
+        focusBarcode();
+
+        Log.i("chanmi", "in refreshItemInCartListener : " + barcode.getText());
+
+        return curMoney;
     }
 }

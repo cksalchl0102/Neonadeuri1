@@ -16,14 +16,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1.2"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="3dp"
                 android:text="휴대폰 번호로 로그인하세요!"
                 android:textColor="#8b7d6b"
                 android:textSize="24dp"
@@ -32,16 +32,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="1dp"
                 android:text="   010 부터 입력하세요."
-                android:textColor="#CC9966"
-                android:textSize="16dp" />
+                android:textColor="#ff7f50"
+                android:textSize="14dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7"
+            android:layout_weight="7.3"
             android:orientation="vertical"
             android:weightSum="10">
 
@@ -55,7 +55,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="010-"
-                    android:textSize="45dp" />
+                    android:textSize="40dp"
+                    android:textColor="#9932cc"/>
             </LinearLayout>
 
             <LinearLayout
@@ -92,7 +93,7 @@
                             android:layout_margin="2dp"
                             android:background="#00ff0000"
                             android:gravity="center"
-                            android:src="@drawable/oneone" />
+                            android:src="@drawable/numbertwo" />
 
                         <ImageButton
                             android:id="@+id/button3"
@@ -101,7 +102,7 @@
                             android:layout_margin="2dp"
                             android:background="#00ff0000"
                             android:gravity="center"
-                            android:src="@drawable/oneone" />
+                            android:src="@drawable/numberthree"/>
                     </TableRow>
 
                     <TableRow
@@ -179,7 +180,11 @@
                             android:layout_margin="2dp"
                             android:background="#00ff0000"
                             android:gravity="center"
-                            android:src="@drawable/reset" />
+                            android:src="@drawable/resetj"
+                            android:maxHeight="167px"
+                            android:maxWidth="64px"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"/>
 
                         <ImageButton
                             android:id="@+id/button0"
@@ -188,7 +193,7 @@
                             android:layout_margin="2dp"
                             android:background="#00ff0000"
                             android:gravity="center"
-                            android:src="@drawable/oneone" />
+                            android:src="@drawable/numberzero" />
 
                         <ImageButton
                             android:id="@+id/button11"
@@ -197,7 +202,12 @@
                             android:layout_margin="2dp"
                             android:background="#00ff0000"
                             android:gravity="center"
-                            android:src="@drawable/deletedeletedelete" />
+                            android:src="@drawable/delete"
+                            android:maxHeight="167px"
+                            android:maxWidth="64px"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            />
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
@@ -209,7 +219,7 @@
             android:layout_weight="1.5"
             android:orientation="vertical"
             android:layout_marginTop="3dp"
-            android:weightSum="1.5">
+            android:weightSum="2">
 
             <Button
                 android:id="@+id/loginButton"
