@@ -65,7 +65,7 @@
                 android:maxWidth="40dp"
                 android:progress="0"
                 android:progressDrawable="@drawable/seekbar"
-                android:thumb="@drawable/cur" />
+                android:thumb="@drawable/smile" />
             <!--
                         <ProgressBar
                             android:id="@+id/progress"
@@ -101,9 +101,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:hint="바코드가 찍히는 부분"
                     android:imeOptions="actionDone"
-
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:maxLength="30" />
 
 
@@ -220,7 +220,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:textAlignment="center"
                             android:text="이름" />
 
@@ -234,7 +234,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.5"
                             android:textAlignment="center"
                             android:text=" 수량" />
 
@@ -248,7 +248,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.5"
                             android:text="삭제"
                             android:textAlignment="center" />
                     </TableRow>
@@ -388,6 +388,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:textColor="#a52a2a"
                         android:hint="결과" />
 
                     <TextView
@@ -396,6 +397,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:textColor="#a52a2a"
                         android:hint="결과" />
 
                     <TextView
@@ -404,6 +406,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:textColor="#a52a2a"
                         android:hint="결과" />
                 </TableRow>
             </TableLayout>

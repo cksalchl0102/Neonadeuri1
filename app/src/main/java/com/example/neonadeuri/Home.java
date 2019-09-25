@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +54,9 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Observer;
@@ -83,8 +88,11 @@ public class Home extends AppCompatActivity {
     ImageButton refreshItemInCart = null;
 
     Button logoutButton = null;
+    HashMap<String, String> nameChange = new HashMap<>();
+    String[] productAll;
     String[] pi;
     String barcodeString;
+    String barcodeString2;
     String productNameForCompare = "";
 
     String[] piForC;
@@ -140,7 +148,6 @@ public class Home extends AppCompatActivity {
         listView = findViewById(R.id.in_cart_list);
         listView.setAdapter(inCartAdapter);
 
-
         seekBar = findViewById(R.id.seekBar1);
         seekBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -153,6 +160,7 @@ public class Home extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 seekBarSetText();
                 curMoneyTextView.setText(i + "원");
+                focusBarcode();
             }
 
             @Override
@@ -174,11 +182,13 @@ public class Home extends AppCompatActivity {
         inCartAdapter.addItem("이니스프리 선크림", "10", "2", "1+1 행사중");
         inCartAdapter.addItem("르꼬끄 백팩", "10", "1", "-");
 */
-        inCartAdapter.addItem(" 허니 버터 아몬드","1200","3","30% discount");
-        inCartAdapter.addItem("카카오프렌즈 아이스 텀블러","12000","2","1+1");
-        inCartAdapter.addItem("임금님표  이천쌀","40000","1","20% discount");
-        inCartAdapter.addItem("종가집 보쌈 무말랭이","4000","3","1+1");
-        inCartAdapter.addItem("로지텍G 게이밍 무선 마우스","107000","1","-");
+        inCartAdapter.addItem(" 허니 버터 아몬드", "1200", "3", "30% discount");
+        inCartAdapter.addItem("카카오프렌즈 아이스 텀블러", "12000", "2", "1+1");
+        inCartAdapter.addItem("임금님표  이천쌀", "40000", "1", "20% discount");
+        inCartAdapter.addItem("종가집 보쌈 무말랭이", "4000", "3", "1+1");
+        inCartAdapter.addItem("로지텍G 게이밍 무선 마우스", "107000", "1", "-");
+
+
         barcode = findViewById(R.id.barcode);
         barcode.setInputType(0);
         /*barcode.setFocusableInTouchMode(true);
@@ -228,14 +238,21 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                barcode = findViewById(R.id.barcode);
+                Log.d("gg", barcode.getText().toString());
                 if (barcode.getText().toString().length() == 8) {
                     barcodeString = barcode.getText().toString();
-                    if (checkProduct(barcodeString)) {
-                        compareProducts(productNameForCompare);
-                        settingCompareTable(piForC, ApiForC, BpiForC);
-                        if (checkItemNumber(pi[1])) {
+                    barcodeString2 = barcode.getText().toString();
+                    if (checkProduct(barcodeString)) { //db에서 바코드 추출
+
+                       checkProductNumber(barcodeString);
+
+                        getName(pi[1]);//영어-한글 로 번역.
+                        compareProducts(productNameForCompare);//3사 비교.
+                        settingCompareTable(piForC, ApiForC, BpiForC);//3사 비교 결과
+                        if (checkItemNumber(getName(pi[1]))) {
                             //일치하는게 있다면 true;
-                            plusItemNumber(pi[1]);
+                            plusItemNumber(getName(pi[1]));
                             focusBarcode();
                             if (focusView.equals(R.id.barcode)) {
                                 Log.i("focus", "in old product : success");
@@ -262,31 +279,13 @@ public class Home extends AppCompatActivity {
                         focusBarcode();
                         Toast.makeText(Home.this, "등록된 상품이 아닙니다.", Toast.LENGTH_LONG).show();
                     }
-                    /*compareProducts(productNameForCompare);
-                    focusBarcode();
-                    settingCompareTable(piForC, ApiForC, BpiForC);*/
 
-
-                    // Log.i("chanmi","pi[0] = "+pi[0]);
-                    //productNameForCompare = pi[1].toString();
-                    //compareProducts(productNameForCompare);
-
-                  /*  if (compareProducts(barcodeString)) {
-                        settingCompareTable();
-                    }else{
-                        Toast.makeText(getApplicationContext(),"가격비교 불가",Toast.LENGTH_LONG).show();
-                    }
-*/
                     Log.i("chanmi", barcodeString);
-                    /*if(checkProduct(barcodeString)){
-                        inCartAdapter.addItem(pi[1],pi[2],"1",pi[3]);
-                        inCartAdapter.notifyDataSetChanged();*/
-                    //}
+
 
                 }
-                // clearBarcodeText();
                 Log.i("chanmi", "in afterTextChanged barcodeEditText : " + barcode.getText());
-                // focusBarcode();
+
             }
         });
 
@@ -294,7 +293,6 @@ public class Home extends AppCompatActivity {
         hansungProductName = findViewById(R.id.hansungMart_product_name_editText);
         hansungProductPrice = findViewById(R.id.hansungMart_product_price_editText);
         hansungCompareResult = findViewById(R.id.hansungMart_product_result_editText);
-
         AProductName = findViewById(R.id.A_product_name_editText);
         AProductPrice = findViewById(R.id.A_product_price_editText);
         ACompareResult = findViewById(R.id.A_product_result_editText);
@@ -303,8 +301,21 @@ public class Home extends AppCompatActivity {
         BProductPrice = findViewById(R.id.B_product_price_editText);
         BCompareResult = findViewById(R.id.B_product_result_editText);
 
+
+
         //settingCompareTable(piForC, ApiForC, BpiForC);
         //listAddItem(pi);
+        /*refreshItemInCart.performClick();
+        sampleingTable();*/
+        chectProductAll();
+    }
+
+    private class ListViewEX implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            //String toast = view.
+        }
     }
 
     //로그아웃
@@ -331,7 +342,7 @@ public class Home extends AppCompatActivity {
     View.OnClickListener refreshItemInCartListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {/*
-            *//*checkProduct("00000001");
+         *//*checkProduct("00000001");
             checkProduct("00000005");
             checkProduct("00000005");
             checkProduct("00000024");
@@ -506,6 +517,50 @@ public class Home extends AppCompatActivity {
         return result;
     }
 
+    //딩니가 새로 짜는 부분
+    public String getName(String pname) {   //HashMap 이용하여 한글 이름으로 변경
+        Log.i("chanmi", "현재 상품 이름 : " + pname);
+        Log.i("chanmi", "상품 한글 이름 : " + nameChange.get(pname));
+        return nameChange.get(pname);
+    }
+
+    //딩니가 새로 짜는 부분
+    public boolean chectProductAll() {  //모든 DB 불러와서 HashMap에 저장
+        String resultAll = "";
+        try {
+            resultAll = new ProductTask().execute("-", "getProductsAll").get();
+            productAll = resultAll.split("/");
+
+            Log.i("chanmi", "resultAll = " + resultAll);
+            if (productAll[0].equals("getProductOK")) {
+                for (int i = 1; i < productAll.length; i++) {
+                    Resources res = getResources();
+                    String[] p_array = res.getStringArray(R.array.products);
+                    nameChange.put(productAll[i], p_array[i - 1]);
+                    Log.i("chanmi :", productAll[i] + "=" + nameChange.get(productAll[i]));
+                }
+
+                barcodeString = "";
+                barcode.setText("");
+               /* barcode.setFocusableInTouchMode(true);
+                barcode.requestFocus();*/
+                Log.i("chanmi", "모든 DB 불러들이기 성공");
+                return true;
+            } else {
+                Message.information(Home.this, "알림", "DB 불러오기 실패");
+                Log.i("chanmi", "모든 DB 불러오기 실패!@!@##!#@!");
+                barcodeString = "";
+                barcode.setText("");
+                return false;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public boolean checkProduct(String searchbarcode) {
         /*
@@ -572,16 +627,16 @@ public class Home extends AppCompatActivity {
                 productNameForCompare = pi[1];
 
 
-                barcodeString = "";
-                barcode.setText("");
+                //barcodeString = "";
+                //barcode.setText("");
                /* barcode.setFocusableInTouchMode(true);
                 barcode.requestFocus();*/
                 Log.i("chanmi", "barcode :" + barcode.getText().toString());
                 return true;
             } else {
                 Message.information(Home.this, "알림", "등록된 상품이 아닙니다.");
-                barcodeString = "";
-                barcode.setText("");
+
+                //barcode.setText("");
                 return false;
             }
         } catch (InterruptedException e) {
@@ -622,7 +677,6 @@ public class Home extends AppCompatActivity {
 
             if (piForC[0].equals("loadHansungProductOK")) {
                 focusBarcode();
-
                 return true;
             } else if (piForC[0].equals("loadHansungProductFail")) {
                 focusBarcode();
@@ -663,16 +717,18 @@ public class Home extends AppCompatActivity {
         b = Integer.parseInt(bs[2]);
         int big = 0, mid = 0, small = 0;
 
+        String hsName = getName(hs[1]);
+
         big = (h > a) && (h > b) ? h : (b > a ? b : a);
         small = (a > h) && (b > h) ? h : (a > b ? b : a);
         mid = (h > a) ? ((h > b) ? ((a > b) ? a : b) : h) : ((a > b) ? ((h > b) ? h : b) : a);
 
 
-        hansungProductName.setText(hs[1]);
+        hansungProductName.setText(hsName);
         hansungProductPrice.setText(hs[2]);
-        AProductName.setText(as[1]);
+        AProductName.setText(hsName);
         AProductPrice.setText(as[2]);
-        BProductName.setText(bs[1]);
+        BProductName.setText(hsName);
         BProductPrice.setText(bs[2]);
 
         if (big == mid && mid == small) {
@@ -841,13 +897,17 @@ public class Home extends AppCompatActivity {
     }*/
     public void listAddItem(String[] args) {
         String name, price, num, info;
-        name = args[1];
+        name = getName(args[1]);
         price = args[2];
-        info = args[3];
+        if (args[3].equals("null"))
+            info = "-";
+        else
+            info = args[3];
         num = "1";
         InCartItem inCartItem = new InCartItem();
         inCartItem.setItemName(name);
         inCartItem.setItemPrice(price);
+
         inCartItem.setItemInfo(info);
         inCartItem.setItemNumber(num);
 
@@ -860,6 +920,7 @@ public class Home extends AppCompatActivity {
 
         barcode.setFocusableInTouchMode(true);
         barcode.requestFocus();
+        refreshItemInCart.performClick();
     }
 
     public void clearBarcodeText() {
@@ -918,6 +979,7 @@ public class Home extends AppCompatActivity {
     public void focusBarcode() {
         barcodeString = "";
         barcode.setText("");
+        barcode.setFocusable(true);
         barcode.setFocusableInTouchMode(true);
         barcode.requestFocus();
         barcode.setInputType(0);
@@ -944,14 +1006,11 @@ public class Home extends AppCompatActivity {
                 } else
                     cntNum /= 2;
                 curMoney = curMoney + curPrice * cntNum;
-            }
-            else if (curInfo.equals("20% discount")) {
-                curMoney = curMoney + (int)(curPrice * 0.8);
-            }
-            else if (curInfo.equals("30% discount")) {
-                curMoney = curMoney + (int)(curPrice * 0.7);
-            }
-            else {
+            } else if (curInfo.equals("20% discount")) {
+                curMoney = curMoney + (int) (curPrice * 0.8);
+            } else if (curInfo.equals("30% discount")) {
+                curMoney = curMoney + (int) (curPrice * 0.7);
+            } else {
                 curMoney += curPrice * cntNum;
             }
 
@@ -967,5 +1026,56 @@ public class Home extends AppCompatActivity {
         Log.i("chanmi", "in refreshItemInCartListener : " + barcode.getText());
 
         return curMoney;
+    }
+
+    public void sampleingTable() {
+        String name = "허니 버터 아몬드";
+        double hsPrice = 1200 * 0.7;
+        double aPrice = 1200, bPrice = 1200;
+        int hsPriceResult = (int) hsPrice;
+        int aPriceResult = (int) aPrice;
+        int bPriceResult = (int) bPrice;
+        String hsResult = "가장 싸다";
+        String abResult = "가장 비싸다.";
+
+        hansungProductName.setText(name);
+        AProductName.setText(name);
+        BProductName.setText(name);
+
+        hansungProductPrice.setText(String.valueOf(hsPriceResult + "원"));
+        AProductPrice.setText(String.valueOf(aPriceResult) + "원");
+        BProductPrice.setText(String.valueOf(bPriceResult) + "원");
+
+
+        hansungCompareResult.setText(hsResult);
+        ACompareResult.setText(abResult);
+        BCompareResult.setText(abResult);
+
+    }
+
+    public boolean checkProductNumber(String bbarcode) {
+        String resultNumberType = "";
+        try {
+            resultNumberType = new ProductTask().execute(bbarcode, "setProductNumberHS").get();
+            Log.i("chanmi", "resultNumberType : " + resultNumberType);
+            if (resultNumberType.equals("setProductNumber_HS success!")) {
+                Log.i("chanmi", "재고 업데이트 성공!");
+                barcode.setText(null);
+                barcodeString = "";
+                return true;
+            } else {
+                Log.i("chanmi", "재고 업데이트 실패!");
+                barcode.setText(null);
+                barcodeString = "";
+                return false;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        barcode.setText(null);
+        barcodeString = "";
+        return false;
     }
 }

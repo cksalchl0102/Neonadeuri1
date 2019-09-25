@@ -1,3 +1,305 @@
 <resources>
     <string name="app_name">Neonadeuri</string>
+    <string-array name="products">
+        <item>구운 아몬드(480G)  </item>
+        <item>허니버터 아몬드(210G)</item>
+        <item>깐밤(150G)</item>
+        <item>미국산 호두(450G)</item>
+        <item>마카다미아(180G)</item>
+        <item>하루견과 크랜베리(250G)</item>
+        <item>호박씨(300G*2입)</item>
+        <item>유기농 믹스넛(700G)</item>
+        <item>초이스엘 피스타치오(300G)</item>
+        <item>종가집 진한두부 (부침용)(300G)</item>
+        <item>종가집 진한두부 (찌개용)(300G)</item>
+        <item>풀무원 순두부 (찌개용)(350G)</item>
+        <item>풀무원 순두부찌개 양념장(140G)</item>
+        <item>한우 불고기세트(1.4KG)</item>
+        <item>임금님표 이천쌀(10KG)</item>
+        <item>임금님표 이천쌀(4KG)</item>
+        <item>대왕님표 여주쌀(10kg)</item>
+        <item>대왕님표 여주쌀(4KG)</item>
+        <item>호주산 냉동 소LA식갈비(1KG)</item>
+        <item>하림 간편 닭가슴살(200G)</item>
+        <item>목우촌 훈제오리 슬라이스(600G)</item>
+        <item>유기농 현미(3.6KG)</item>
+        <item>찰현미(1KG)</item>
+        <item>CJ 다진 마늘</item>
+        <item>롯데 의성마늘빅그릴비엔나(286G*2입)</item>
+        <item>풀무원 오리엔탈 드레싱(240G)</item>
+        <item>방울토마토(750G/팩)</item>
+        <item>허니버터 오징어(250G)</item>
+        <item>친환경 성주참외(1.2KG/봉)</item>
+        <item>미국산 냉동블루베리(1KG/봉)</item>
+        <item>Dole 후룻컵 파인애플(198G/컵)</item>
+        <item>델몬트 후레쉬컷 슬라이스 파인애플 836g</item>
+        <item>Dole 후룻컵 망고(198G/컵)</item>
+        <item>유기농 오렌지주스(100ML*3/봉)</item>
+        <item>풀무원 김밥김(40G)</item>
+        <item>CJ 백설 맛있는 소시지(160G)</item>
+        <item>CJ 더건강한 의성마늘햄(160G*3입)</item>
+        <item>CJ 햄스빌 아침에 베이컨(70G)</item>
+        <item>CJ 맥스봉치즈(560G)</item>
+        <item>한성 크래미(180G*2입)</item>
+        <item>CJ 부산어묵 (사각)(200G)</item>
+        <item>CJ 얼큰 오뎅한그릇</item>
+        <item>동원 왕새우만두(315G*2입)</item>
+        <item>풀무원 갈비만두(400G*2입)</item>
+        <item>농심 생생야끼우동</item>
+        <item>청정원 스파게티면(500G)</item>
+        <item>풀무원 새콤달콤 유부초밥(330G)</item>
+        <item>풀무원 와사비무쌈(300G)</item>
+        <item>서울 목장신선 우유(1,000ML)</item>
+        <item>남양 맛있는우유GT(500ML)</item>
+        <item>통큰 홍삼정(240G)</item>
+        <item>천제명 홍삼석류30포</item>
+        <item>쏠라C 20정 (레몬맛)(2G*20정)</item>
+        <item>네이처셀 뽀로로 비타민C(1.2G*50정)</item>
+        <item>동원GNC 메가맨 50 플러스(1500MG*60정)</item>
+        <item>고려은단 비타민C 센스(2G*70포)</item>
+        <item>고려은단 비타민C 1000(1.08G*120정)</item>
+        <item>뉴트리원 온가족 종합비타민 미네랄(1,500MG*365정)</item>
+        <item>쏠라C 블루베리맛(2G*20정)</item>
+        <item>뼈에좋은 칼슘마그네슘비타민D아연 1박스(1개월분)</item>
+        <item>성풍 유기농 아로니아 분말 150g</item>
+        <item>가다비타 오메가3+비타민C(1,100MG*300정)</item>
+        <item>세노비스 루테인+오메가3(600MG*60정)</item>
+        <item>라바 비타민C 구미(3G*21개)</item>
+        <item>레인보우라이트 우먼스 원(54G)</item>
+        <item>레인보우라이트 맨스 원(33.36G)</item>
+        <item>프라임엘 혈행건강 홍오메가-3(54G)</item>
+        <item>솔가 오메가-3 DHA/EPA(72G)</item>
+        <item>뉴트리원 프로 다이어트(2G*50포)</item>
+        <item>뉴트리원 믹스 에너지인핸서(56ML*2입)</item>
+        <item>뉴트리원 믹스 그린커피빈(56ML*2입)</item>
+        <item>뉴트리원 프리미엄 루테인</item>
+        <item>씨제이 한뿌리 양배추즙(60ML*20포)</item>
+        <item>프라임엘 간건강 밀크씨슬(1,000MG*90캡슐)</item>
+        <item>건강한 간 밀크씨슬(500MG*120캡슐)</item>
+        <item>프라임엘 로열골드 비타민 ADE(600MG*120캡슐)</item>
+        <item>프라임엘 피부건강 스피루리나(400MG*180정)</item>
+        <item>천호식품 당컨디션(80ML*20입)</item>
+        <item>뉴트리원 프리미엄 유산균 맥스(2G*30포)</item>
+        <item>통큰 프로바이오틱스 생유산균(2G*90포)</item>
+        <item>씨제이 BYO 장유산균 LP243(2G*30포)</item>
+        <item>씨제이 피부생유산균CJLP-133(2G*40포)</item>
+        <item>아임리얼 딸기(700ML)</item>
+        <item>자연은 100%착즙 (포도)(1L)</item>
+        <item>웅진 자연은 90일 토마토(1.5L)</item>
+        <item>델몬트 (망고)(1.5L)</item>
+        <item>델몬트 순수함이가득한 (포도)(1.0L)</item>
+        <item>롯데 델몬트 건강기원 선물세트(180ML*12입)</item>
+        <item>미닛 홈스타일 (청포도)(1.2L)</item>
+        <item>후버 셀렉션 (오렌지)(200ML)</item>
+        <item>아임리얼 딸기(190ML)</item>
+        <item>아임리얼 케일키위(700ML)</item>
+        <item>가야 진심 토마토100(1L)</item>
+        <item>가야 진심 토마토100(245ML)</item>
+        <item>매일 썬업브이플랜 (청사과허브)(330ML*2입)</item>
+        <item>로리나 레몬 에이드(330ML)</item>
+        <item>아임리얼 딸기 스무디(190ML)</item>
+        <item>매일 썬업브이플랜 (자몽허브)(330ML*2입)</item>
+        <item>로리나 모히또(330ML)</item>
+        <item>서정쿠킹 느린수정과(1,000ML)</item>
+        <item>아임리얼 수박(190ML)</item>
+        <item>매일두유 99.89(190ML*12입)</item>
+        <item>정식품 베지밀 B (달콤한맛)(190ML*24입)</item>
+        <item>정식품 베지밀 B (달콤한맛)(950ML)</item>
+        <item>삼육 고소한 삼육두유 A(950ML)</item>
+        <item>맛있는 두유GT (달콤한 맛)(190ML*16입)</item>
+        <item>정식품 베지밀 A (담백한맛)(950ML)</item>
+        <item>매일두유 식이섬유(190ML*12입)</item>
+        <item>광동제약 비타500 C(100ML*20병)</item>
+        <item>롯데 비타파워(100ML*10입)</item>
+        <item>게토레이 (레몬)(600ML)</item>
+        <item>포카리스웨트(1.5L)</item>
+        <item>광동 비타500(100ML*10입)</item>
+        <item>글라소 비타민워터 (에너지)(500ML)</item>
+        <item>글라소 비타민워터 (파워씨)(500ML)</item>
+        <item>게토레이 (레몬+블루볼트)(1.5L*2입)</item>
+        <item>포카리스웨트(340ML*4입)</item>
+        <item>포카리스웨트(620ML)</item>
+        <item>맥심 TOP 마스타라떼(275ML)</item>
+        <item>맥심 TOP 아메리카노(275ML)</item>
+        <item>칸타타 프리미엄 라떼(275ML)</item>
+        <item>칸타타 아메리카노(275ML)</item>
+        <item>롯데 레쓰비 마일드(175ML*6입)</item>
+        <item>칸타타 더치블랙(275ML)</item>
+        <item>아침란 50g x 2구(페트)</item>
+        <item>웰치소다 (백포도)(1.5L)</item>
+        <item>칠성 사이다(250ML*6입)</item>
+        <item>롯데 밀키스(250ML*6입)</item>
+        <item>일화 맥콜(250ML*6입)</item>
+        <item>웰치소다 (포도)(500ML)</item>
+        <item>오레오 씬즈 바닐라무스(84G)</item>
+        <item>미닛메이드 스파클링 (청포도)(1.25L)</item>
+        <item>웰치소다 (백포도)(500ML)</item>
+        <item>미닛메이드 스파클링 (유자)(345ML)</item>
+        <item>스프라이트(210ML*6입)</item>
+        <item>환타 오렌지(600ML)</item>
+        <item>펩시콜라 (미니)(160ML*12입)</item>
+        <item>농심 짜왕 매운맛(4개)</item>
+        <item>농심 보글보글 부대찌개면(4개)</item>
+        <item>농심 무파마탕면(5개)</item>
+        <item>오뚜기 새송이 쇠고기죽(285G)</item>
+        <item>동원 양반 야채죽(285G)</item>
+        <item>한성 한끼愛 비벼먹는오징어(90G)</item>
+        <item>오뚜기 튀김우동컵</item>
+        <item>한성 속초식 명태초무침(230G)</item>
+        <item>오뚜기 스파게티 컵</item>
+        <item>싱그람 명이나물(300G+300G)</item>
+        <item>농심 짜파게티 큰사발</item>
+        <item>초이스엘 3색쌈무(360G)</item>
+        <item>농심 신라면 큰사발</item>
+        <item>아디다스 올코트 농구공</item>
+        <item>나이키 줄넘기</item>
+        <item>모나미 중간글씨 네임펜 혼합3본</item>
+        <item>3M 포스트잇 노랑(3*3)</item>
+        <item>3M 프리미엄 라텍스장갑(그린,M)</item>
+        <item>3M 후레쉬 항균 장갑(100매)</item>
+        <item>농심_벌집피자_90G</item>
+        <item>농심_짜왕큰사발_105G</item>
+        <item>백설 카놀라유(900ML)</item>
+        <item>아모레_메디안치석케어칫솔_4입</item>
+        <item>국산 냄비받침(대)</item>
+        <item>스토 성인 패밀리 슬리퍼</item>
+        <item>룸바이홈 방수 식탁보</item>
+        <item>프리미엄 스텐 나눔 용기 원형(800ML)</item>
+        <item>일반식물용 영양제(36ML*10입)</item>
+        <item>요가매트</item>
+        <item>룸바이홈 누빔 거실화(진그레이)(265MM)</item>
+        <item>니베아 립 (피치)(4.8G)</item>
+        <item>오션 소프트 글러브</item>
+        <item>룸바이홈 레더 라이크 쿠션(네이비)(45*45CM)</item>
+        <item>카카오프렌즈 섬유향수 (용기,네오)(90ML)</item>
+        <item>페브리즈 화장실용 (비누향)</item>
+        <item>페브리즈 화장실용 (레몬)</item>
+        <item>홈스타 습기좀 부탁해(8입)</item>
+        <item>알파 미니제습기</item>
+        <item>스미스 S자 고리</item>
+        <item>인트라젠 영양제 200정</item>
+        <item>SJ_모던 규조토 비누받침(컵받침겸용)</item>
+        <item>오션 솔로 소주잔(60ML)</item>
+        <item>거품이 오래가는 맥주잔(380ML)</item>
+        <item>카카오프렌즈 페이스물통주머니(무지)_WB-215</item>
+        <item>락앤락 쿨러 토트백 (블루)(8L)</item>
+        <item>아벨 블루 찬기 (소)</item>
+        <item>초이스엘세이브 단면이쑤시개 (대)(470입)</item>
+        <item>커피라운지 반찬통(4입)</item>
+        <item>초이스엘 천연옻칠 사선 뒤지개</item>
+        <item>퀸센스 스톤 에그팬 3구 24cm</item>
+        <item>에디슨 뽀로로 젓가락 (왼손)</item>
+        <item>뽀로로 입체핸들스푼</item>
+        <item>초이스엘 살대가 안빠지는 건조대 (중)</item>
+        <item>원목 넥타이 걸이 2P</item>
+        <item>모닝 파워 스테플러 (33호)</item>
+        <item>옛날 자연숯(700G)</item>
+        <item>샌드 변기솔</item>
+        <item>눈알 약 15mm/유니아트</item>
+        <item>칼라 하드보드지 (핑크)(39*54)</item>
+        <item>뚝딱뚝딱 수수깡</item>
+        <item>리락쿠마 용돈기입장</item>
+        <item>리락쿠마 스톱워치</item>
+        <item>암막99% 햇빛가리개 (양)</item>
+        <item>평화 아이사랑 가위</item>
+        <item>멕리듬 굿나잇 스팀패치 (무향)(14매)</item>
+        <item>디즈니 퍼니 라운드 욕실의자_미키</item>
+        <item>카카오 투명 양치컵 (라이언)</item>
+        <item>초이스엘 미스트 분무기 120</item>
+        <item>초이스엘 무형광 세탁망 (대용량)(70*70CM)</item>
+        <item>카시오 전자계산기 AX-120ST</item>
+        <item>라인프렌즈 급속충전기 (브라운)</item>
+        <item>라인프렌즈 8핀케이블 (샐리)</item>
+        <item>고쿠보 옷걸이형 집게 건조대</item>
+        <item>3M 타일 및 틈새 브러쉬</item>
+        <item>불스원 레인OK 발수 와이퍼(550MM)</item>
+        <item>3M 욕조닦이</item>
+        <item>핌 미니 청소기</item>
+        <item>클린히트 매직 스폰지</item>
+        <item>EXO 원핸드 스마트폰 홀더</item>
+        <item>불스원 무선충전 거치대 (통풍구)</item>
+        <item>소낙스 가죽보호제</item>
+        <item>퍼즐 4극 AUX 케이블</item>
+        <item>영창 캐스터네츠</item>
+        <item>무민 미니손수건</item>
+        <item>어벤져스 뜯어쓰는 색종이</item>
+        <item>DVD명탐정코난[수평선상의음모]</item>
+        <item>카카오톡 방향제 (네오)</item>
+        <item>플라워s 1단 원목 독서대</item>
+        <item>USB 스마트 홈모기 매트</item>
+        <item>보쉬 사계절플러스 전구 (H4)</item>
+        <item>찍찍이캐치볼</item>
+        <item>초이스엘 화이트보드(89.7*59.7CM)</item>
+        <item>양키캔들 (미드썸머나잇)</item>
+        <item>원피스 방향제 크리스탈향 (에이스)</item>
+        <item>원피스 방향제 피치향 (프랑키)</item>
+        <item>원피스 방향제 솔향 (조로)</item>
+        <item>원피스 방향제 스쿼시향 (상디)</item>
+        <item>원피스 방향제 라벤더향 (루피)</item>
+        <item>원피스 방향제 멜론향 (우솝)</item>
+        <item>원피스 루피해적단 수면안대</item>
+        <item>멀베리 고급 실크 수면안대 피치</item>
+        <item>순면수면안대 그레이네이비</item>
+        <item>헬로키티 수면안대</item>
+        <item>미니퍼즐 원피스 세계를향하여(108PCS)</item>
+        <item>미니퍼즐 원피스 각자의능력(108PCS)</item>
+        <item>더블커버 듀얼 컨실러</item>
+        <item>백젤 스키니터치 젤프루프 라이너</item>
+        <item>컨시크 컬러 마크 인텐스 립스틱</item>
+        <item>트로피칼 시리얼 글리터 플레이크</item>
+        <item>톤 겟잇 틴트 워터바</item>
+        <item>리락쿠마 사이드자물쇠</item>
+        <item>보나핏 아동 목링글 케이스양말(3족)</item>
+        <item>포인트 딥클린 클렌징폼(175G)</item>
+        <item>포인트 딥클린 스크럽폼(150G)</item>
+        <item>레트로 핸드타월 (WH)(34*34CM(3매))</item>
+        <item>스쿨 네임 핸드타월 (라이언)(34*34CM(3매))</item>
+        <item>스쿨 네임 핸드타월 (어피치)(34*34CM(3매))</item>
+        <item>룸바이홈 웰시코기 말랑낮잠쿠션(37*38CM)</item>
+        <item>룸바이홈 웰시코기 메모리폼 목쿠션(30*31CM)</item>
+        <item>룸바이홈 웰시코기 메모리폼다용도쿠션(40*20CM)</item>
+        <item>룸바이홈 웰시코기 바디필로우(85*26CM)</item>
+        <item>에어워크 Air 워킹화</item>
+        <item>신비아파트 베이직스푼포크</item>
+        <item>국산 내열뚝배기(대)</item>
+        <item>국산 내열뚝배기(중)</item>
+        <item>국산 내열뚝배기(소)</item>
+        <item>아기목욕가운(라이트핑크)</item>
+        <item>콜게이트 치약 (레귤러)(250G*2입)</item>
+        <item>카카오 어피치 키링 립밤 (스트로베리)(6G)</item>
+        <item>자연은 싱그런 선물세트(180ML*12입)</item>
+        <item>룸바이홈 링클피그먼트이불 (NY,S)(150*200CM)</item>
+        <item>포레스트 섬유 탈취 향수 (코튼블로섬)</item>
+        <item>토이스토리 교정용 스텐젓가락</item>
+        <item>카페 서버포트 800ml</item>
+        <item>Only Style 남성 면7부바지</item>
+        <item>Only Style 여성 면7부바지</item>
+        <item>베스트암막커튼 (그레이)(460*225CM)</item>
+        <item>베스트암막커튼 (블루)(300*225CM)</item>
+        <item>베스트암막커튼 (블루)(460*225CM)</item>
+        <item>카카오 규조토매트 어피치블로썸</item>
+        <item>뽀로로 키즈전용 비데변기커버</item>
+        <item>카카오 규조토매트 라이언블루</item>
+        <item>보나핏 남아 무형광선인장드로즈(2입)</item>
+        <item>보나핏 여아 무형광유니콘드로즈(2입)</item>
+        <item>짱구 피규어 방향제 (크레용)</item>
+        <item>테팔 그래픽 프라이팬</item>
+        <item>남양키친플라워 쿠킨 에어프라이어(3.2L)</item>
+        <item>룸바이홈 비즈 목쿠션(2P)(32*30CM)</item>
+        <item>마일드 메모리폼 등쿠션</item>
+        <item>핑크퐁 스트라이프 썬햇</item>
+        <item>포켓몬 피카츄 사파리</item>
+        <item>Only Style 베이직 컬러 볼캡</item>
+        <item>[AK PLAZA][압소바]AQ731607(차슈 니트모)아이보리</item>
+        <item>그리드 카시트 (그레이)</item>
+        <item>아동 스티치 마스크</item>
+        <item>스텔라레알레 트레일워킹화</item>
+        <item>S9 남성 소프트 워킹화</item>
+        <item>디아더마 당근크림(50ML)</item>
+        <item>판교 점보 실버 압핀 JSS 5통입1개 MO</item>
+        <item>카카오프렌즈 이중스텐보틀(라이언)(350ML)</item>
+        <item>스포츠550 발목 보호대</item>
+        <item>스포츠550 압박 발목 보호대</item>
+        <item>헬스 보호대(손목/팔꿈치/무릎/발목)</item>
+    </string-array>
 </resources>

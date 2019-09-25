@@ -22,6 +22,10 @@ import java.util.ArrayList;
 public class InCartAdapter extends BaseAdapter {
 
     private ArrayList<InCartItem> listViewInCartItemList = new ArrayList<InCartItem>();
+    String getNum = "";
+    int num = 0;
+    String setNum = "";
+    String returns = "";
 
     public InCartAdapter() {
 
@@ -61,6 +65,7 @@ public class InCartAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final int pos = position;
+
         final Context context = parent.getContext();
 
         if (convertView == null) {
@@ -79,9 +84,19 @@ public class InCartAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Log.d("chanmi", "minus button click OK");
                 try {
-                    listViewInCartItemList.remove(position);
-                    notifyDataSetInvalidated();
-                    notifyDataSetChanged();
+                    if (listViewInCartItemList.get(position).getItemNumber().equals("1")) {
+                        listViewInCartItemList.remove(position);
+                        notifyDataSetInvalidated();
+                        notifyDataSetChanged();
+                    } else {
+                        getNum = listViewInCartItemList.get(position).getItemNumber();
+                        num = Integer.parseInt(getNum);
+                        num = num - 1;
+                        setNum = Integer.toString(num);
+                        listViewInCartItemList.get(position).setItemNumber(setNum);
+                        notifyDataSetInvalidated();
+                        notifyDataSetChanged();
+                    }
                 } catch (Exception e) {
                     Log.d("chanmi", "삭제 안돼 ㅎㅎ ㅜ.ㅜ");
                 }
@@ -93,6 +108,10 @@ public class InCartAdapter extends BaseAdapter {
         itemPrice.setText(inCartItem.getItemPrice());
         itemInfo.setText(inCartItem.getItemInfo());
         itemNative.setText(inCartItem.getItemNumber());
+
+        //아이템의 세로 크기 조정
+
+
         return convertView;
 
     }
@@ -107,7 +126,9 @@ public class InCartAdapter extends BaseAdapter {
 
         listViewInCartItemList.add(inCartItem);
     }
-    public void plusItemNumber(int i){
+
+    public void plusItemNumber(int i) {
         listViewInCartItemList.get(i).setItemNumber();
     }
+
 }

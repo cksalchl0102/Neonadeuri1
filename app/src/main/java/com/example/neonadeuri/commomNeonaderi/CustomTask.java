@@ -1,6 +1,5 @@
 package com.example.neonadeuri.commomNeonaderi;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -65,7 +64,7 @@ public class CustomTask extends AsyncTask<String, Void, String> {
             if (conn != null) conn.disconnect();
             Log.e("conn_disconnect", "disconnect");
         }
-        Log.i("chanmi","Login recieveMsg = "+recieveMsg);
+        Log.i("chanmi", "Login recieveMsg = " + recieveMsg);
         return recieveMsg;
     }
 }
