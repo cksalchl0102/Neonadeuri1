@@ -18,7 +18,7 @@ public class ProductsTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        String jspUrl = "http://113.198.84.24:8080/study_v1/neonaduriProductsCompare.jsp";
+        String jspUrl = "http://192.168.56.1:8080/study_v1/neonaduriProductsCompare.jsp";
         //랩실 : 113.198.84.24
         //집 : 192.168.219.100
         //thisgs : 192.168.0.15:5555

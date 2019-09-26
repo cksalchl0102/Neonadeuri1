@@ -53,6 +53,7 @@ import com.example.neonadeuri.commomNeonaderi.ProductsTask;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.net.NoRouteToHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -76,6 +77,7 @@ public class Home extends AppCompatActivity {
     ImageView imageView = null;
     ListView listView;
     InCartAdapter inCartAdapter;
+    public String minusPro = "";
 
     SeekBar seekBar = null;
     TextView curMoneyTextView = null;
@@ -89,6 +91,7 @@ public class Home extends AppCompatActivity {
 
     Button logoutButton = null;
     HashMap<String, String> nameChange = new HashMap<>();
+    HashMap<String,String> dbNames=new HashMap<>();
     String[] productAll;
     String[] pi;
     String barcodeString;
@@ -111,6 +114,9 @@ public class Home extends AppCompatActivity {
 
     View focusView = null;
     String[] tmp;
+
+    LayoutInflater inflater;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,12 +188,12 @@ public class Home extends AppCompatActivity {
         inCartAdapter.addItem("이니스프리 선크림", "10", "2", "1+1 행사중");
         inCartAdapter.addItem("르꼬끄 백팩", "10", "1", "-");
 */
-        inCartAdapter.addItem(" 허니 버터 아몬드", "1200", "3", "30% discount");
+       /* inCartAdapter.addItem(" 허니 버터 아몬드", "1200", "3", "30% discount");
         inCartAdapter.addItem("카카오프렌즈 아이스 텀블러", "12000", "2", "1+1");
         inCartAdapter.addItem("임금님표  이천쌀", "40000", "1", "20% discount");
         inCartAdapter.addItem("종가집 보쌈 무말랭이", "4000", "3", "1+1");
         inCartAdapter.addItem("로지텍G 게이밍 무선 마우스", "107000", "1", "-");
-
+*/
 
         barcode = findViewById(R.id.barcode);
         barcode.setInputType(0);
@@ -245,7 +251,7 @@ public class Home extends AppCompatActivity {
                     barcodeString2 = barcode.getText().toString();
                     if (checkProduct(barcodeString)) { //db에서 바코드 추출
 
-                       checkProductNumber(barcodeString);
+                        checkProductNumber(barcodeString);
 
                         getName(pi[1]);//영어-한글 로 번역.
                         compareProducts(productNameForCompare);//3사 비교.
@@ -289,6 +295,15 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.in_cart_list_item, null);
+        final ImageButton imageButton = view.findViewById(R.id.list_item_minus_imageButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Home.this,"minus",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         hansungProductName = findViewById(R.id.hansungMart_product_name_editText);
         hansungProductPrice = findViewById(R.id.hansungMart_product_price_editText);
@@ -300,42 +315,101 @@ public class Home extends AppCompatActivity {
         BProductName = findViewById(R.id.B_product_name_editText);
         BProductPrice = findViewById(R.id.B_product_price_editText);
         BCompareResult = findViewById(R.id.B_product_result_editText);
-
-
-
         //settingCompareTable(piForC, ApiForC, BpiForC);
         //listAddItem(pi);
         /*refreshItemInCart.performClick();
         sampleingTable();*/
+        listView.setOnItemClickListener(itemListener);
+
         chectProductAll();
     }
-
-    private class ListViewEX implements AdapterView.OnItemClickListener{
-
+    AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            //String toast = view.
+            String name =  ((TextView)view.findViewById(R.id.itemName)).getText().toString();
+
+            Log.i("dingni", "Home name = " + name);
+
+            String productName = getKey(nameChange, name);
+            Log.i("dingni", name + productName);
+
+            productNameForCompare = productName;   //productNameForCompare은 HashMap을 거치기 전 'product@' 형식 이어야 함
+
+            compareProducts(productNameForCompare); //3사 비교
+            settingCompareTable(piForC, ApiForC, BpiForC);  //3사 결과 비교값 테이블 만들기*/
+            ImageButton imageButton = (ImageButton) view.findViewById(R.id.list_item_minus_imageButton);
+            switch (view.getId()){
+                case R.id.list_item_minus_imageButton:
+                    Toast.makeText(Home.this,"minus버튼 눌림",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            if(view.getId()==R.id.list_item_minus_imageButton){
+                Toast.makeText(Home.this,"minus버튼 눌림",Toast.LENGTH_SHORT).show();
+            }
+
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(Home.this,"minus버튼 눌림",Toast.LENGTH_SHORT).show();
+                   /* String name2 =  ((TextView)view.findViewById(R.id.itemName)).getText().toString();
+                    checkProductNumberMinus(name2);*/
+                }
+            });
         }
+    };
+    //HashMap에서 value로 key값 찾기
+    public String getKey(HashMap<String, String> map, String name) {
+        Set key = map.keySet();
+        String keyName = "";
+
+        for (Iterator iterator = key.iterator(); iterator.hasNext();) {
+            keyName = (String) iterator.next();
+            if(map.get(keyName).equals(name))
+                return keyName;
+        }
+        return keyName;
     }
+
+    /*
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            TextView textView = view.findViewById(R.id.itemName);
+            String name = (String) textView.getText();
+            Toast.makeText(Home.this, "삭제 : " + name, Toast.LENGTH_LONG).show();
+            Log.i("chanmi", " imageButton.setOnClickListener");
+        }
+    };*/
+
 
     //로그아웃
     View.OnClickListener logoutFuncListener = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.MyAlertDialogStyle);
-            builder.setTitle("Log Out");
-            builder.setMessage("정말로 로그아웃 하시겠습니까??? ");
-            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(getApplicationContext(), Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            builder.setNegativeButton("취소", null);
-            builder.show();
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.logoutButton:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.MyAlertDialogStyle);
+                    builder.setTitle("Log Out");
+                    builder.setMessage("정말로 로그아웃 하시겠습니까??? ");
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getApplicationContext(), Login.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("취소", null);
+                    builder.show();
+                    break;
+                /*case R.id.in_cart_list:
+                    Toast.makeText(Home.this, "listView Click", Toast.LENGTH_LONG).show();
+                    Log.d("chanmi","list Click");
+
+                    break;*/
+            }
         }
+
     };
 
     //카드 안에 있는 물품 새로 고침
@@ -522,6 +596,12 @@ public class Home extends AppCompatActivity {
         Log.i("chanmi", "현재 상품 이름 : " + pname);
         Log.i("chanmi", "상품 한글 이름 : " + nameChange.get(pname));
         return nameChange.get(pname);
+    }
+    public String getDBNAme(String honeName){
+
+
+
+        return null;
     }
 
     //딩니가 새로 짜는 부분
@@ -712,9 +792,11 @@ public class Home extends AppCompatActivity {
 
     public void settingCompareTable(String[] hs, String[] as, String[] bs) {
         int h = 0, a = 0, b = 0;
+        //"1+1"  "20% discount"  "30% discount"
         h = Integer.parseInt(hs[2]);
         a = Integer.parseInt(as[2]);
         b = Integer.parseInt(bs[2]);
+
         int big = 0, mid = 0, small = 0;
 
         String hsName = getName(hs[1]);
@@ -951,6 +1033,7 @@ public class Home extends AppCompatActivity {
         return false;
     }
 
+
     public void plusItemNumber(String name) {
         for (int i = 0; i < inCartAdapter.getCount(); i++) {
             if (name.equals(inCartAdapter.getName(i))) {
@@ -1076,6 +1159,22 @@ public class Home extends AppCompatActivity {
         }
         barcode.setText(null);
         barcodeString = "";
+        return false;
+    }
+    public boolean checkProductNumberMinus(String productName){
+        String resultProductMinus = "";
+        try{
+            resultProductMinus = new ProductsTask().execute(productName,"setProductNumberMinusHS").get();
+            if(resultProductMinus.equals("setProductNumberMinus_HS success!")){
+                Log.i("chanmi","재고 관리 Minus 업데이트 성공");
+            }else{
+                Log.i("chanmi","재고 관리 Minus 업데이트 실패");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 }

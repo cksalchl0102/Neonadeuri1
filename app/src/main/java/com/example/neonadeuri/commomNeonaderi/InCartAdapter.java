@@ -1,6 +1,8 @@
 package com.example.neonadeuri.commomNeonaderi;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,9 @@ import com.example.neonadeuri.Home;
 import com.example.neonadeuri.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.MissingFormatArgumentException;
+import java.util.concurrent.ExecutionException;
 
 public class InCartAdapter extends BaseAdapter {
 
@@ -26,9 +31,9 @@ public class InCartAdapter extends BaseAdapter {
     int num = 0;
     String setNum = "";
     String returns = "";
-
+    String minusName = "";
+    String setMinusName="";
     public InCartAdapter() {
-
     }
 
     @Override
@@ -67,7 +72,6 @@ public class InCartAdapter extends BaseAdapter {
         final int pos = position;
 
         final Context context = parent.getContext();
-
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.in_cart_list_item, parent, false);
@@ -85,21 +89,32 @@ public class InCartAdapter extends BaseAdapter {
                 Log.d("chanmi", "minus button click OK");
                 try {
                     if (listViewInCartItemList.get(position).getItemNumber().equals("1")) {
+                        minusName = listViewInCartItemList.get(position).getItemName().toString();
+
                         listViewInCartItemList.remove(position);
+                        /*minusName = listViewInCartItemList.get(position).getItemName().toString();
+                        Log.i("chanmi","minusName : "+minusName);*/
+                        checkProductNumberMinus(minusName);
                         notifyDataSetInvalidated();
                         notifyDataSetChanged();
+
                     } else {
                         getNum = listViewInCartItemList.get(position).getItemNumber();
                         num = Integer.parseInt(getNum);
                         num = num - 1;
                         setNum = Integer.toString(num);
                         listViewInCartItemList.get(position).setItemNumber(setNum);
+                        minusName = listViewInCartItemList.get(position).getItemName().toString();
+
+                        checkProductNumberMinus(minusName);
                         notifyDataSetInvalidated();
                         notifyDataSetChanged();
                     }
                 } catch (Exception e) {
                     Log.d("chanmi", "삭제 안돼 ㅎㅎ ㅜ.ㅜ");
                 }
+
+                Log.i("chanmi", "minusName : " + minusName);
             }
         });
         InCartItem inCartItem = listViewInCartItemList.get(position);
@@ -127,8 +142,34 @@ public class InCartAdapter extends BaseAdapter {
         listViewInCartItemList.add(inCartItem);
     }
 
+    public String getMinusName() {
+        return minusName;
+    }
+
+    public void setMinusName(String name) {
+        this.minusName = name;
+    }
+
     public void plusItemNumber(int i) {
         listViewInCartItemList.get(i).setItemNumber();
+    }
+
+
+    public boolean checkProductNumberMinus(String productName) {
+        String resultProductMinus = "";
+        try {
+            resultProductMinus = new ProductTask().execute(productName, "setProductNumberMinusHS").get();
+            if (resultProductMinus.equals("setProductNumberMinus_HS success!")) {
+                Log.i("chanmi", "재고 관리 Minus 업데이트 성공");
+            } else {
+                Log.i("chanmi", "재고 관리 Minus 업데이트 실패");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

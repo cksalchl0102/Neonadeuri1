@@ -181,7 +181,7 @@
                             android:background="#00ff0000"
                             android:gravity="center"
                             android:src="@drawable/resetj"
-                            android:maxHeight="167px"
+                            android:maxHeight="120px"
                             android:maxWidth="64px"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"/>
@@ -203,7 +203,7 @@
                             android:background="#00ff0000"
                             android:gravity="center"
                             android:src="@drawable/delete"
-                            android:maxHeight="167px"
+                            android:maxHeight="120px"
                             android:maxWidth="64px"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
